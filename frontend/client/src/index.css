@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  font-family: Averta;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@font-face {
+  font-family: 'Averta';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../src/assets/Averta/Averta-Regular.otf") format("opentype");
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.flex-container {
+  width: 100%;
+  margin: auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-start {
+    justify-content: flex-start;
+}
+
+.justify-evenly {
+    justify-content: space-evenly;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.relative {
+    position: relative;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+
