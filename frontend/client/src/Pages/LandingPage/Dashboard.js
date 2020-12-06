@@ -80,6 +80,11 @@ export default class Dashboard extends React.Component {
         elmnt.scrollIntoView({ block: 'end',  behavior: 'smooth' });
     }
 
+    onRestaurantClick() {
+        var elmnt = document.getElementById("restaurants-section");
+        elmnt.scrollIntoView({ block: 'end',  behavior: 'smooth' });
+    }
+
     render() {
         return (
             <div className="landing-page">
@@ -103,10 +108,20 @@ export default class Dashboard extends React.Component {
                 <h3 className="text-center mt-5">Products</h3>
                 <section className="flex-container second-section d-flex justify-center" id="second-section">
                     <div className="d-flex land-prods">
+                        <div onClick={this.onRestaurantClick} className="box vegan">
+                            Restaurants
+                        </div>
+                        <div className="box vegetarian">Recipes</div>
+                    </div>
+                </section>
+                <h3 className="text-center mt-5">Restaurants</h3>
+                <section className="flex-container restaurant-section d-flex justify-center" id="restaurants-section">
+                    <div className="d-flex land-prods">
                         <div className="box vegan">Restaurants</div>
                         <div className="box vegetarian">Recipes</div>
                     </div>
                 </section>
+
             </div>
         );
     }
