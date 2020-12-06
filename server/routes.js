@@ -40,6 +40,20 @@ function getAllGenres(req, res) {
   });
 };
 
+function getAllRestaurants(req, res) {
+  var query = `
+    SELECT id, name, city, stars
+    FROM Restaurants
+    LIMIT 10
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
 
 
 /* ---- Q1b (Dashboard) ---- */
@@ -207,5 +221,6 @@ module.exports = {
 	getTopInGenre: getTopInGenre,
 	getRecs: getRecs,
 	getDecades: getDecades,
-  bestGenresPerDecade: bestGenresPerDecade
+  bestGenresPerDecade: bestGenresPerDecade,
+  getAllRestaurants: getAllRestaurants
 }

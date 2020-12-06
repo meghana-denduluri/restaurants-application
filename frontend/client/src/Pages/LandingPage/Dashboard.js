@@ -3,7 +3,7 @@ import './landing.css';
 import myImg from '../../assets/food.jpg';
 // import PageNavbar from './PageNavbar';
 // import GenreButton from './GenreButton';
-// import DashboardMovieRow from './DashboardMovieRow';
+import DashboardRestaurantRow from './DashboardRestaurantRow';
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -13,38 +13,18 @@ export default class Dashboard extends React.Component {
         // and a list of movies for a specified genre.
         this.state = {
             genres: [],
-            movies: []
+            movies: [],
+            restaurants: []
         }
 
         this.showMovies = this.showMovies.bind(this);
+        this.onRestaurantClick = this.onRestaurantClick.bind(this);
     }
 
     // React function that is called when the page load.
     componentDidMount() {
-        // Send an HTTP request to the server.
-        fetch("http://localhost:8081/genres", {
-            method: 'GET' // The type of HTTP request.
-        })
-            .then(res => res.json()) // Convert the response data to a JSON.
-            .then(genreList => {
-                if (!genreList) return;
-                // Map each genreObj in genreList to an HTML element:
-                // A button which triggers the showMovies function for each genre.
-                // let genreDivs = genreList.map((genreObj, i) =>
-                //   <GenreButton id={"button-" + genreObj.genre} onClick={() => this.showMovies(genreObj.genre)} genre={genreObj.genre} />
-                // );
-                // Set the state of the genres list to the value returned by the HTTP response from the server.
-                // this.setState({
-                //   genres: genreDivs
-
-                // })
-                // console.log(" \n  check : " + (this.state.genres))
-            })
-            .catch(err => console.log(err))	// Print the error if there is one.
+        
     }
-
-
-
 
     /* ---- Q1b (Dashboard) ---- */
     /* Set this.state.movies to a list of <DashboardMovieRow />'s. */
@@ -81,7 +61,38 @@ export default class Dashboard extends React.Component {
     }
 
     onRestaurantClick() {
+        console.log("next");
+
         var elmnt = document.getElementById("restaurants-section");
+        elmnt.scrollIntoView({ block: 'end',  behavior: 'smooth' });
+        
+        fetch("http://localhost:8081/restaurants" , {
+            method: 'GET' // The type of HTTP request.
+        })
+            .then(res => res.json()) // Convert the response data to a JSON.
+            .then(restaurantsList => {
+                if (!restaurantsList) {
+                    return;
+                }
+                // Map each genreObj in genreList to an HTML element:
+                // A button which triggers the showMovies function for each genre.
+                let restaurantDivs = restaurantsList.map((restObj, i) =>
+                  <DashboardRestaurantRow
+                    name={restObj.name}
+                    city={restObj.city}
+                    stars={restObj.stars}/>
+                );
+                // Set the state of the genres list to the value returned by the HTTP response from the server.
+                this.setState({
+                  restaurants: restaurantDivs
+
+                })
+                console.log(restaurantsList);
+            })
+    }
+
+    onRecipeClick() {
+        var elmnt = document.getElementById("recipes-section");
         elmnt.scrollIntoView({ block: 'end',  behavior: 'smooth' });
     }
 
@@ -111,14 +122,20 @@ export default class Dashboard extends React.Component {
                         <div onClick={this.onRestaurantClick} className="box vegan">
                             Restaurants
                         </div>
-                        <div className="box vegetarian">Recipes</div>
+                        <div onClick={this.onRecipeClick} className="box vegetarian">
+                            Recipes
+                        </div>
                     </div>
                 </section>
                 <h3 className="text-center mt-5">Restaurants</h3>
                 <section className="flex-container restaurant-section d-flex justify-center" id="restaurants-section">
                     <div className="d-flex land-prods">
-                        <div className="box vegan">Restaurants</div>
-                        <div className="box vegetarian">Recipes</div>
+                        {this.state.restaurants}
+                    </div>
+                </section>
+                <h3 className="text-center mt-5">Recipes</h3>
+                <section className="flex-container recipes-section d-flex justify-center" id="recipes-section">
+                    <div className="d-flex land-prods">
                     </div>
                 </section>
 

@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3001' }));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -23,7 +23,7 @@ app.get('/genres', routes.getAllGenres);
 /* ---- Q1b (Dashboard) ---- */
 app.get('/genres/:genre',routes.getTopInGenre); // Hint: Replace () => {} with the appropriate route handler.
 
-
+app.get('/restaurants',routes.getAllRestaurants);
 
 /* ---- Q2 (Recommendations) ---- */
 app.get('/recs/:movieName',routes.getRecs);
