@@ -1,6 +1,6 @@
 import React from 'react';
 import '../LandingPage/landing.css';
-// import PageNavbar from './PageNavbar';
+import PageNavbar from '../PageNavbar';
 // import GenreButton from './GenreButton';
 import DashboardRestaurantRow from './DashboardRestaurantRow';
 
@@ -54,6 +54,7 @@ export default class Restaurants extends React.Component {
     render() {
         return (
             <div>
+                <PageNavbar active="restaurants" />
                     {this.state.restaurants}
 
                 </div>

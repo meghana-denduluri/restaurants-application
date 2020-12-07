@@ -1,6 +1,6 @@
 import React from 'react';
 import '../LandingPage/landing.css';
-// import PageNavbar from './PageNavbar';
+import PageNavbar from '../PageNavbar';
 // import GenreButton from './GenreButton';
 import DashboardRecipeRow from './DashboardRecipeRow';
 
@@ -53,6 +53,7 @@ export default class Recipes extends React.Component {
         return (
 
                     <div>
+                    <PageNavbar active="recipes" />
                     {this.state.recipes}
 
                     </div>
