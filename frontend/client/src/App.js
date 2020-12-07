@@ -5,6 +5,8 @@ import {
 	Switch
 } from 'react-router-dom';
 import Dashboard from './Pages/LandingPage/Dashboard';
+import Restaurants from './Pages/RestaurantPage/RestaurantsHome'
+import Recipes from './Pages/RecipePage/RecipesHome'
 // import Recommendations from './Recommendations';
 // import BestGenres from './BestGenres';
 
@@ -20,6 +22,25 @@ export default class App extends React.Component {
 							path="/"
 							render={() => (
 								<Dashboard />
+							)}
+						/>
+						<Route
+							exact
+							path="/dashboard"
+							render={() => (
+								<Dashboard />
+							)}
+						/>
+						<Route
+							path="/recipes"
+							render={() => (
+								<Recipes />
+							)}
+						/>
+						<Route
+							path="/restaurants"
+							render={() => (
+								<Restaurants />
 							)}
 						/>
 					</Switch>

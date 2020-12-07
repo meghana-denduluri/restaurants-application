@@ -1,6 +1,6 @@
 import React from "react";
 
-export default class DashboardMovieRow extends React.Component {
+export default class DashboardRestaurantRow extends React.Component {
   constructor(props) {
     super(props);
 
