@@ -1,7 +1,7 @@
 import React from 'react';
 import './landing.css';
 import myImg from '../../assets/food.jpg';
-import PageNavbar from '../PageNavbar';
+//import PageNavbar from '../PageNavbar';
 // import GenreButton from './GenreButton';
 
 export default class Dashboard extends React.Component {
@@ -28,7 +28,6 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <div className="landing-page">
-                <PageNavbar active="dashboard" />
                 <section className="flex-container first-section d-flex">
                     <div className="content">
                         <p className="large-text">

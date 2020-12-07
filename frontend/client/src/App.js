@@ -26,7 +26,7 @@ export default class App extends React.Component {
 						/>
 						<Route
 							exact
-							path="/dashboard"
+							path="/websitename"
 							render={() => (
 								<Dashboard />
 							)}
