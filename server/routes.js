@@ -18,21 +18,104 @@ connection.connect(function(err) {
 // connection.end();
 
 // config.connectionLimit = 10;
-// var connection = mysql.createPool(config);
 
-/* -------------------------------------------------- */
-/* ------------------- Route Handlers --------------- */
-/* -------------------------------------------------- */
 
-/* ---- Q1a (Dashboard) ---- */
-// write a query to get distinct genres in the database
-
-function getAllRestaurants(req, res) {
-  var query = `
-    SELECT id, name, city, stars
-    FROM Restaurants
-    LIMIT 10
+function filterRestaurants(req, res) {
+  let city = req.params.city;
+  let tag = req.params.tag;
+  if (city!='All' && tag!='All') {
+  
+    var query = `
+  SELECT Restaurants.id, name, city, stars
+  FROM Restaurants
+  JOIN RestaurantCategories ON Restaurants.id=RestaurantCategories.id
+  WHERE Restaurants.city = '${city}'
+  and RestaurantCategories.categories= '${tag}' 
+  order by stars desc, RAND ()
+  limit 20;
   `;
+  } else if (city!='All' && tag=='All') {
+    var query = `
+    SELECT Restaurants.id, name, city, stars
+    FROM Restaurants
+    WHERE Restaurants.city = '${city}'
+    order by stars desc, RAND ()
+    limit 20;
+    `;
+  } else if (tag!='All'&& city=='All') {
+    var query = `
+  SELECT Restaurants.id, name, city, stars
+  FROM Restaurants
+  JOIN RestaurantCategories ON Restaurants.id=RestaurantCategories.id
+  WHERE RestaurantCategories.categories= '${tag}' 
+  order by stars desc, RAND ()
+  limit 20;
+  `;
+  }
+  else{
+    var query = `
+    SELECT Restaurants.id, name, city, stars
+    FROM Restaurants
+    order by stars desc, RAND ()
+    limit 20;
+    `;
+  }
+  
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+function getCityOptions(req, res) {
+
+    let tag = req.params.tag;
+    if (tag=='All') 
+    {
+      var query = `
+    SELECT distinct Restaurants.city
+    FROM Restaurants
+    order by Restaurants.city;
+    `;
+    }
+    else {
+      var query = `
+      SELECT distinct Restaurants.city
+      FROM Restaurants
+      JOIN RestaurantCategories ON Restaurants.id=RestaurantCategories.id
+      WHERE RestaurantCategories.categories= '${tag}' 
+      order by Restaurants.city;
+      `;
+    }
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+function getTagOptions(req, res) {
+  let city = req.params.city;
+    
+  if (city=='All') 
+  {
+    var query = `
+  SELECT distinct RestaurantCategories.categories as tag
+  FROM RestaurantCategories
+  order by RestaurantCategories.categories;
+  `;
+  }
+  else {
+    var query = `
+    SELECT distinct RestaurantCategories.categories as tag
+    FROM Restaurants
+    JOIN RestaurantCategories ON Restaurants.id=RestaurantCategories.id
+    WHERE Restaurants.city= '${city}' 
+    order by RestaurantCategories.categories;
+    `;
+  }
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {
@@ -41,12 +124,33 @@ function getAllRestaurants(req, res) {
   });
 };
 
-function getAllRecipes(req, res) {
+function searchRestaurants(req, res) {
+  let term = req.params.term;
+  
+    var query = `
+  SELECT Restaurants.id, name, city, stars
+  FROM Restaurants
+  WHERE Restaurants.name LIKE '${term}%'
+  order by Restaurants.name
+  limit 20;
+  `;
+
+  
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+function getRandRecipes(req, res) {
+  
   var query = `
     SELECT id, name, description
     FROM Recipes
     LIMIT 10
-  `;
+  `
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {
@@ -57,6 +161,9 @@ function getAllRecipes(req, res) {
 
 // The exported functions, which can be accessed in index.js.
 module.exports = {
-  getAllRestaurants,
-  getAllRecipes
+  getRandRecipes,
+  filterRestaurants,
+  getCityOptions,
+  getTagOptions,
+  searchRestaurants
 }

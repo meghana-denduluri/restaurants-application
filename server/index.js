@@ -18,9 +18,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // The route localhost:8081/genres is registered to the function
 // routes.getAllGenres, specified in routes.js.
 
-app.get('/recipes',routes.getAllRecipes);
-app.get('/restaurants',routes.getAllRestaurants);
-
+app.get('/recipes',routes.getRandRecipes);
+app.get('/filterRestaurants/:city/:tag',routes.filterRestaurants);
+app.get('/searchRestaurants/:term',routes.searchRestaurants);
+app.get('/getCityOptions/:tag',routes.getCityOptions);
+app.get('/getTagOptions/:city',routes.getTagOptions);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
