@@ -15,7 +15,6 @@ export default class DashboardRestaurantRow extends React.Component {
   render() {
     return (
       <div className="restaurant">
-        <div className="key">{this.state.id}</div>
         <div className="name">{this.state.name}</div>
         <div className="city">{this.state.city}</div>
         <div className="stars">{this.state.stars}</div>
