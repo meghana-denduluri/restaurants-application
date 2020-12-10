@@ -35,7 +35,7 @@ export default class Restaurants extends React.Component {
     // React function that is called when the page load.
     componentDidMount()  {
         
-                this.filterRestaurants();
+                this.filterRestaurants('All','All');
                 
                 this.updateCityOptions('All');
                 this.updateTagOptions('All');
