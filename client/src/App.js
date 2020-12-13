@@ -7,6 +7,7 @@ import {
 import Dashboard from './Pages/LandingPage/Dashboard';
 import Restaurants from './Pages/RestaurantPage/RestaurantsHome'
 import Recipes from './Pages/RecipePage/RecipesHome'
+import RestaurantDetails from './Pages/RestaurantPage/RestaurantDetails'
 // import Recommendations from './Recommendations';
 // import BestGenres from './BestGenres';
 
@@ -42,6 +43,10 @@ export default class App extends React.Component {
 							render={() => (
 								<Restaurants />
 							)}
+						/>
+						<Route
+							path="/restaurant/:id"
+							component={RestaurantDetails}
 						/>
 					</Switch>
 				</Router>
