@@ -1,0 +1,80 @@
+.movies-container .movies-header,
+.results-container .restaurant {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 40px;
+}
+
+.restaurant .name,
+.movies-header .header-lg {
+  flex: 1 0 50%;
+}
+
+.movies-header .header,
+.restaurant .city,
+.restaurant .stars {
+  flex: 1 0 25%;
+}
+
+.genres-container {
+  /* margin: 10px 0; */
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  /* border-bottom: 1px solid #ddd; */
+}
+
+.search-container .search_bar {
+}
+
+.genres-container .genre {
+  flex: 1 0 20%;
+  margin: 5px 0;
+  padding: 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.genres-container .genre:hover .container .movies-container {
+  background-color: #ddd;
+}
+
+.movies-container .movies-header,
+.results-container .restaurant {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 40px;
+}
+
+.Dashboard {
+  background: #004e36;
+}
+
+.restaurant .name,
+.movies-header .header-lg {
+  flex: 1 0 50%;
+}
+
+.movies-header .header,
+.restaurant .city,
+.movie .stars {
+  flex: 1 0 25%;
+}
+
+.columns .jumbotron {
+  flex: 1 0 20%;
+  width: 40%;
+  height: 300px;
+  margin-left: 40px;
+  margin-right: 40px;
+  align-items: center;
+}
+.columns {
+  display: flex;
+}
+
+.jumbotron {
+  padding-right: 40px;
+}
