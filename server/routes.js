@@ -128,7 +128,7 @@ function searchRestaurants(req, res) {
   let term = req.params.term;
   
     var query = `
-  SELECT Restaurants.id, name, city, stars
+  SELECT id, name, city, stars
   FROM Restaurants
   WHERE Restaurants.name LIKE '${term}%'
   order by Restaurants.name

@@ -7,6 +7,8 @@ import {
 import Dashboard from './Pages/LandingPage/Dashboard';
 import Restaurants from './Pages/RestaurantPage/RestaurantsHome'
 import Recipes from './Pages/RecipePage/RecipesHome'
+import RecipeProfile from './Pages/RecipeProfile'
+import RestaurantProfile from './Pages/RestaurantProfile'
 // import Recommendations from './Recommendations';
 // import BestGenres from './BestGenres';
 
@@ -42,6 +44,18 @@ export default class App extends React.Component {
 							render={() => (
 								<Restaurants />
 							)}
+						/>
+						<Route
+							path="/restaurantProfile/:restaurantId"
+							render={(props) => (
+								<RestaurantProfile {...props} />
+							  )}
+						/>
+						<Route
+							path="/recipeProfile/:recipeId"
+							render={(props) => (
+								<RecipeProfile {...props}/>
+							  )}
 						/>
 					</Switch>
 				</Router>

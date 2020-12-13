@@ -55,11 +55,12 @@ export default class Restaurants extends React.Component {
                 // Map each genreObj in genreList to an HTML element:
                 // A button which triggers the showMovies function for each genre.
                 let restaurantDivs = restaurantsList.map((restObj, i) =>
-                  <DashboardRestaurantRow
-                    key={restObj.id}
-                    name={restObj.name}
-                    city={restObj.city}
-                    stars={restObj.stars}/>
+                <DashboardRestaurantRow
+                id={restObj.id}
+                  key={restObj.id}
+                  name={restObj.name}
+                  city={restObj.city}
+                  stars={restObj.stars}/>
                 );
 
 
@@ -134,6 +135,7 @@ searchRestaurants(e) {
             // A button which triggers the showMovies function for each genre.
             let restaurantDivs = restaurantsList.map((restObj, i) =>
               <DashboardRestaurantRow
+              id={restObj.id}
                 key={restObj.id}
                 name={restObj.name}
                 city={restObj.city}
