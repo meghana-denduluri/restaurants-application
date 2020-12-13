@@ -1,8 +1,8 @@
 var mysql = require('mysql');
 var connection = mysql.createConnection({
   host     : "recipes.cffddarmshqp.us-east-1.rds.amazonaws.com",
-  user     : "admin",
-  password : "mmsaeats",
+  user     : "guest",
+  password : "guesteats",
   port     : 3306,
   database : "master"
 });
@@ -96,7 +96,7 @@ function getCityOptions(req, res) {
     }
   });
 };
-function getTagOptions(req, res) {
+function getRestTagOptions(req, res) {
   let city = req.params.city;
     
   if (city=='All') 
@@ -128,7 +128,7 @@ function searchRestaurants(req, res) {
   let term = req.params.term;
   
     var query = `
-  SELECT Restaurants.id, name, city, stars
+  SELECT id, name, city, stars
   FROM Restaurants
   WHERE Restaurants.name LIKE '${term}%'
   order by Restaurants.name
@@ -144,26 +144,78 @@ function searchRestaurants(req, res) {
   });
 };
 
-function getRandRecipes(req, res) {
-  
-  var query = `
+
+  function searchRecipes(req, res) {
+    let term = req.params.term;
+    
+      var query = `
     SELECT id, name, description
     FROM Recipes
-    LIMIT 10
-  `
-  connection.query(query, function(err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-};
+    WHERE name LIKE '${term}%'
+    order by name
+    limit 20;
+    `;
+  
+    
+    connection.query(query, function(err, rows, fields) {
+      if (err) console.log(err);
+      else {
+        res.json(rows);
+      }
+    });
+  };
 
+
+  function filterRecipes(req, res) {
+    let tag = req.params.tag;
+    if (tag=='All') {
+    
+      var query = `
+      SELECT id, name, description
+      FROM Recipes
+      order by RAND ()
+      limit 20;
+    `;}
+    else{
+      var query = `
+      SELECT id, name, description
+      FROM Recipes
+      NATURAL JOIN RecipeTags
+      where tag = '${tag}%'
+      order by RAND ()
+      limit 20;
+    `;
+    }
+    
+    connection.query(query, function(err, rows, fields) {
+      if (err) console.log(err);
+      else {
+        res.json(rows);
+      }
+    });
+  };
+
+  function getRecTagOptions(req, res) {
+      
+      var query = `
+      SELECT distinct tag
+      FROM RecipeTags
+      order by tag;
+      `;
+    connection.query(query, function(err, rows, fields) {
+      if (err) console.log(err);
+      else {
+        res.json(rows);
+      }
+    });
+  };
 // The exported functions, which can be accessed in index.js.
 module.exports = {
-  getRandRecipes,
   filterRestaurants,
   getCityOptions,
-  getTagOptions,
-  searchRestaurants
+  getRestTagOptions,
+  searchRestaurants,
+  filterRecipes,
+  searchRecipes,
+  getRecTagOptions
 }
