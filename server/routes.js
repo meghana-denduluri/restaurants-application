@@ -1,8 +1,8 @@
 var mysql = require('mysql');
 var connection = mysql.createConnection({
   host     : "recipes.cffddarmshqp.us-east-1.rds.amazonaws.com",
-  user     : "admin",
-  password : "mmsaeats",
+  user     : "guest",
+  password : "guesteats",
   port     : 3306,
   database : "master"
 });
