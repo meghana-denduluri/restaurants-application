@@ -369,6 +369,25 @@ function getRecipeReviews(req, res) {
 
 }
 
+function getRestaurantLinks(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT s.restaurantID
+    FROM RecipesOf r JOIN ServedAt s ON r.dishID = s.dishID
+    WHERE r.recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
 // The exported functions, which can be accessed in index.js.
 module.exports = {
   filterRestaurants,
@@ -386,4 +405,5 @@ module.exports = {
   getRecipeIngredients,
   getRecipeSteps,
   getRecipeReviews,
+  getRestaurantLinks
 }
