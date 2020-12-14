@@ -11,7 +11,6 @@ export default class RecipeProfile extends React.Component {
             recipeId: this.props.match.params.recipeId
         }
 
-
     }
 
     // React function that is called when the page load.
