@@ -13,38 +13,38 @@ export default class Restaurants extends React.Component {
         // The state maintained by this React Component. This component maintains the list of genres,
         // and a list of movies for a specified genre.
         this.state = {
-            restaurants : [],
-            cityOptions : [],
-            tagOptions : [],
+            restaurants: [],
+            cityOptions: [],
+            tagOptions: [],
             searchCity: 'All',
             searchTag: 'All',
         }
 
-    this.updateCityOptions = this.updateCityOptions.bind(this);
-    this.updateTagOptions = this.updateTagOptions.bind(this);
+        this.updateCityOptions = this.updateCityOptions.bind(this);
+        this.updateTagOptions = this.updateTagOptions.bind(this);
 
-    this.selectCity = this.selectCity.bind(this);
-    this.selectTag = this.selectTag.bind(this);
+        this.selectCity = this.selectCity.bind(this);
+        this.selectTag = this.selectTag.bind(this);
 
-    this.searchRestaurants = this.searchRestaurants.bind(this)
+        this.searchRestaurants = this.searchRestaurants.bind(this)
 
-    this.filterRestaurants = this.filterRestaurants.bind(this)
+        this.filterRestaurants = this.filterRestaurants.bind(this)
 
     }
 
     // React function that is called when the page load.
-    componentDidMount()  {
-        
-                this.filterRestaurants('All','All');
-                
-                this.updateCityOptions('All');
-                this.updateTagOptions('All');
-            
+    componentDidMount() {
+
+        this.filterRestaurants('All', 'All');
+
+        this.updateCityOptions('All');
+        this.updateTagOptions('All');
+
     }
-    
-    filterRestaurants(city,tag)  {
-        
-        fetch("http://localhost:8081/filterRestaurants/"+city+"/"+  tag ,{
+
+    filterRestaurants(city, tag) {
+
+        fetch("http://localhost:8081/filterRestaurants/" + city + "/" + tag, {
             method: 'GET' // The type of HTTP request.
         })
             .then(res => res.json()) // Convert the response data to a JSON.
@@ -55,130 +55,130 @@ export default class Restaurants extends React.Component {
                 // Map each genreObj in genreList to an HTML element:
                 // A button which triggers the showMovies function for each genre.
                 let restaurantDivs = restaurantsList.map((restObj, i) =>
-                  <DashboardRestaurantRow
-              id={restObj.id}
-                key={restObj.id}
-                name={restObj.name}
-                city={restObj.city}
-                stars={restObj.stars}/>
+                    <DashboardRestaurantRow
+                        id={restObj.id}
+                        key={restObj.id}
+                        name={restObj.name}
+                        city={restObj.city}
+                        stars={restObj.stars} />
                 );
 
 
                 // Set the state of the genres list to the value returned by the HTTP response from the server.
                 this.setState({
-                  restaurants: restaurantDivs,
+                    restaurants: restaurantDivs,
                 })
             })
     }
 
-    
-    selectCity=(e)=> {
-    let city = e.value
-    this.setState({
-        searchCity: city
-    });
-    this.filterRestaurants(city,this.state.searchTag);
-    this.updateTagOptions(city)
-    
+
+    selectCity = (e) => {
+        let city = e.value
+        this.setState({
+            searchCity: city
+        });
+        this.filterRestaurants(city, this.state.searchTag);
+        this.updateTagOptions(city)
+
     }
 
-    selectTag=(e)=> {
+    selectTag = (e) => {
         let tag = e.value
         this.setState({
             searchTag: tag
         });
-        this.filterRestaurants(this.state.searchCity,tag);
+        this.filterRestaurants(this.state.searchCity, tag);
         this.updateCityOptions(tag)
-        }
+    }
 
 
-updateCityOptions(tag){
-    fetch("http://localhost:8081/getCityOptions/"+tag, {
-        method: 'GET' // The type of HTTP request.
-    })
-        .then(res => res.json()) // Convert the response data to a JSON.
-        .then(citiesList => {
-            if (!citiesList) {
-                return;
-            }
+    updateCityOptions(tag) {
+        fetch("http://localhost:8081/getCityOptions/" + tag, {
+            method: 'GET' // The type of HTTP request.
+        })
+            .then(res => res.json()) // Convert the response data to a JSON.
+            .then(citiesList => {
+                if (!citiesList) {
+                    return;
+                }
 
-            let cityOptions = [{
-                label: 'All',
-                value: 'All'
+                let cityOptions = [{
+                    label: 'All',
+                    value: 'All'
                 }]
 
-            for (var i = 0; i < citiesList.length; i++) {
-                cityOptions.push({
-                label: citiesList[i].city,
-                value: citiesList[i].city
-                });
-            }
-            // Set the state of the genres list to the value returned by the HTTP response from the server.
-            this.setState({
-                cityOptions
+                for (var i = 0; i < citiesList.length; i++) {
+                    cityOptions.push({
+                        label: citiesList[i].city,
+                        value: citiesList[i].city
+                    });
+                }
+                // Set the state of the genres list to the value returned by the HTTP response from the server.
+                this.setState({
+                    cityOptions
+                })
+
             })
+    }
 
+    searchRestaurants(e) {
+
+        fetch("http://localhost:8081/searchRestaurants/" + e.target.value, {
+            method: 'GET' // The type of HTTP request.
         })
-}
-
-searchRestaurants(e) {
-        
-    fetch("http://localhost:8081/searchRestaurants/"+e.target.value ,{
-        method: 'GET' // The type of HTTP request.
-    })
-        .then(res => res.json()) // Convert the response data to a JSON.
-        .then(restaurantsList => {
-            if (!restaurantsList) {
-                return;
-            }
-            // Map each genreObj in genreList to an HTML element:
-            // A button which triggers the showMovies function for each genre.
-            let restaurantDivs = restaurantsList.map((restObj, i) =>
-              <DashboardRestaurantRow
-              id={restObj.id}
-                key={restObj.id}
-                name={restObj.name}
-                city={restObj.city}
-                stars={restObj.stars}/>
-            );
+            .then(res => res.json()) // Convert the response data to a JSON.
+            .then(restaurantsList => {
+                if (!restaurantsList) {
+                    return;
+                }
+                // Map each genreObj in genreList to an HTML element:
+                // A button which triggers the showMovies function for each genre.
+                let restaurantDivs = restaurantsList.map((restObj, i) =>
+                    <DashboardRestaurantRow
+                        id={restObj.id}
+                        key={restObj.id}
+                        name={restObj.name}
+                        city={restObj.city}
+                        stars={restObj.stars} />
+                );
 
 
-            // Set the state of the genres list to the value returned by the HTTP response from the server.
-            this.setState({
-              restaurants: restaurantDivs,
+                // Set the state of the genres list to the value returned by the HTTP response from the server.
+                this.setState({
+                    restaurants: restaurantDivs,
+                })
             })
+    }
+
+
+    updateTagOptions(city) {
+        fetch("http://localhost:8081/getRestTagOptions/" + city, {
+            method: 'GET' // The type of HTTP request.
         })
-}
+            .then(res => res.json()) // Convert the response data to a JSON.
+            .then(tagsList => {
+                if (!tagsList) {
+                    return;
+                }
 
-
-updateTagOptions(city){
-    fetch("http://localhost:8081/getRestTagOptions/"+city, {
-        method: 'GET' // The type of HTTP request.
-    })
-        .then(res => res.json()) // Convert the response data to a JSON.
-        .then(tagsList => {
-            if (!tagsList) {
-                return;
-            }
-
-            let tagOptions = [{
-                label: 'All',
-                value: 'All'
+                let tagOptions = [{
+                    label: 'All',
+                    value: 'All'
                 }]
 
-            for (var i = 0; i < tagsList.length; i++) {
-                tagOptions.push({
-                label: tagsList[i].tag,
-                value: tagsList[i].tag
-                });
-            }
-            // Set the state of the genres list to the value returned by the HTTP response from the server.
-            this.setState({
-                tagOptions
-            })
+                for (var i = 0; i < tagsList.length; i++) {
+                    tagOptions.push({
+                        label: tagsList[i].tag,
+                        value: tagsList[i].tag
+                    });
+                }
+                // Set the state of the genres list to the value returned by the HTTP response from the server.
+                this.setState({
+                    tagOptions
+                })
 
-        })
-}
+            })
+    }
 
 
     render() {

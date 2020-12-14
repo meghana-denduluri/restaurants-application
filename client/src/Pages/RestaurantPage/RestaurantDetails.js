@@ -45,9 +45,6 @@ export default class RestaurantDetails extends React.Component {
                     lat: rest.lat,
                     long: rest.long
 
-
-
-
                 });
             })
             .then(x => {
@@ -62,7 +59,7 @@ export default class RestaurantDetails extends React.Component {
 
                         let dishDivs = dishList.map((dishObj, i) =>
                             <DishWithRecipesRow
-                                dishName={dishObj.dishName} />
+                                dishName={dishObj.dishName}>{dishObj.recipes}</DishWithRecipesRow>
                         );
                         // Set the state of the genres list to the value returned by the HTTP response from the server.
                         this.setState({
@@ -91,9 +88,13 @@ export default class RestaurantDetails extends React.Component {
                 <div className="stars">Rating: {this.state.stars} stars</div>
 
                 <br />
-
-                <h2>Dishes:</h2>
-                {this.state.dishes}
+                {this.state.dishes && this.state.dishes.length > 0 ?
+                    <div>
+                        <h2>Dishes:</h2>
+                        {this.state.dishes}
+                    </div> :
+                    <div>This restaurant has dishes :(</div>
+                }
             </div>
 
 

@@ -1,13 +1,13 @@
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-  host     : "recipes.cffddarmshqp.us-east-1.rds.amazonaws.com",
-  user     : "guest",
-  password : "guesteats",
-  port     : 3306,
-  database : "master"
+  host: "recipes.cffddarmshqp.us-east-1.rds.amazonaws.com",
+  user: "guest",
+  password: "guesteats",
+  port: 3306,
+  database: "master"
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
   if (err) {
     console.error('Database connection failed: ' + err.stack);
     return;
@@ -23,8 +23,8 @@ connection.connect(function(err) {
 function filterRestaurants(req, res) {
   let city = req.params.city;
   let tag = req.params.tag;
-  if (city!='All' && tag!='All') {
-  
+  if (city != 'All' && tag != 'All') {
+
     var query = `
   SELECT Restaurants.id, name, city, stars
   FROM Restaurants
@@ -34,7 +34,7 @@ function filterRestaurants(req, res) {
   order by stars desc, RAND ()
   limit 20;
   `;
-  } else if (city!='All' && tag=='All') {
+  } else if (city != 'All' && tag == 'All') {
     var query = `
     SELECT Restaurants.id, name, city, stars
     FROM Restaurants
@@ -42,7 +42,7 @@ function filterRestaurants(req, res) {
     order by stars desc, RAND ()
     limit 20;
     `;
-  } else if (tag!='All'&& city=='All') {
+  } else if (tag != 'All' && city == 'All') {
     var query = `
   SELECT Restaurants.id, name, city, stars
   FROM Restaurants
@@ -52,7 +52,7 @@ function filterRestaurants(req, res) {
   limit 20;
   `;
   }
-  else{
+  else {
     var query = `
     SELECT Restaurants.id, name, city, stars
     FROM Restaurants
@@ -60,8 +60,8 @@ function filterRestaurants(req, res) {
     limit 20;
     `;
   }
-  
-  connection.query(query, function(err, rows, fields) {
+
+  connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
     else {
       res.json(rows);
@@ -70,26 +70,25 @@ function filterRestaurants(req, res) {
 };
 function getCityOptions(req, res) {
 
-    let tag = req.params.tag;
-    if (tag=='All') 
-    {
-      var query = `
+  let tag = req.params.tag;
+  if (tag == 'All') {
+    var query = `
     SELECT distinct Restaurants.city
     FROM Restaurants
     order by Restaurants.city;
     `;
-    }
-    else {
-      var query = `
+  }
+  else {
+    var query = `
       SELECT distinct Restaurants.city
       FROM Restaurants
       JOIN RestaurantCategories ON Restaurants.id=RestaurantCategories.id
       WHERE RestaurantCategories.categories= '${tag}' 
       order by Restaurants.city;
       `;
-    }
+  }
 
-  connection.query(query, function(err, rows, fields) {
+  connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
     else {
       res.json(rows);
@@ -98,9 +97,8 @@ function getCityOptions(req, res) {
 };
 function getRestTagOptions(req, res) {
   let city = req.params.city;
-    
-  if (city=='All') 
-  {
+
+  if (city == 'All') {
     var query = `
   SELECT distinct RestaurantCategories.categories as tag
   FROM RestaurantCategories
@@ -116,7 +114,7 @@ function getRestTagOptions(req, res) {
     order by RestaurantCategories.categories;
     `;
   }
-  connection.query(query, function(err, rows, fields) {
+  connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
     else {
       res.json(rows);
@@ -126,8 +124,8 @@ function getRestTagOptions(req, res) {
 
 function searchRestaurants(req, res) {
   let term = req.params.term;
-  
-    var query = `
+
+  var query = `
   SELECT id, name, city, stars
   FROM Restaurants
   WHERE Restaurants.name LIKE '${term}%'
@@ -135,8 +133,8 @@ function searchRestaurants(req, res) {
   limit 20;
   `;
 
-  
-  connection.query(query, function(err, rows, fields) {
+
+  connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
     else {
       res.json(rows);
@@ -144,85 +142,312 @@ function searchRestaurants(req, res) {
   });
 };
 
-  function searchRecipes(req, res) {
-    let term = req.params.term;
-    
-      var query = `
+function searchRecipes(req, res) {
+  let term = req.params.term;
+
+  var query = `
+  SELECT id, name, description
+  FROM Recipes
+  WHERE name LIKE '${term}%'
+  order by name
+  limit 20;
+  `;
+
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+
+function filterRecipes(req, res) {
+  let tag = req.params.tag;
+  if (tag == 'All') {
+
+    var query = `
     SELECT id, name, description
     FROM Recipes
-    WHERE name LIKE '${term}%'
-    order by name
+    order by RAND ()
     limit 20;
-    `;
-  
-    
-    connection.query(query, function(err, rows, fields) {
-      if (err) console.log(err);
-      else {
-        res.json(rows);
-      }
-    });
-  };
+  `;
+  }
+  else {
+    var query = `
+    SELECT id, name, description
+    FROM Recipes
+    NATURAL JOIN RecipeTags
+    where tag = '${tag}'
+    order by RAND ()
+    limit 20;
+  `;
+  }
 
-
-  function filterRecipes(req, res) {
-    let tag = req.params.tag;
-    if (tag=='All') {
-    
-      var query = `
-      SELECT id, name, description
-      FROM Recipes
-      order by RAND ()
-      limit 20;
-    `;}
-    else{
-      var query = `
-      SELECT id, name, description
-      FROM Recipes
-      NATURAL JOIN RecipeTags
-      where tag = '${tag}'
-      order by RAND ()
-      limit 20;
-    `;
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
     }
-    
-    connection.query(query, function(err, rows, fields) {
-      if (err) console.log(err);
-      else {
-        res.json(rows);
-      }
-    });
-  };
+  });
+};
 
-  function getRecTagOptions(req, res) {
-      
-      var query = `
-      SELECT distinct tag
-      FROM RecipeTags
-      order by tag;
-      `;
-    connection.query(query, function(err, rows, fields) {
-      if (err) console.log(err);
-      else {
-        res.json(rows);
-      }
-    });
-  };
+function getRecTagOptions(req, res) {
 
-  function getRestaurant(req, res) {
-    let lid = req.params.id;
-      var query = `
-      SELECT *
-      FROM Restaurants
-      WHERE '${lid}' = Restaurants.id;
-      `;
-    connection.query(query, function(err, rows, fields) {
-      if (err) console.log(err);
-      else {
-        res.json(rows);
+  var query = `
+    SELECT distinct tag
+    FROM RecipeTags
+    order by tag;
+    `;
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+// restaurant profile page routes
+
+function getRestaurant(req, res) {
+
+  let restId = req.params.restId;
+
+  var query = `
+    SELECT name, address, postal_code, city, stars, state, latitude, longitude
+    FROM Restaurants
+    WHERE id = '${restId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getDishesOfRestaurant(req, res) {
+
+  let restId = req.params.restId;
+
+  var query = `
+    WITH t AS (
+      SELECT s.dishID
+      FROM Restaurants r JOIN ServedAt s ON r.id = s.restaurantID
+      WHERE r.id = '${restId}'
+    )
+    SELECT d.id, d.name
+    FROM t JOIN Dishes d ON t.dishId = d.id;
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipesOfDish(req, res) {
+
+  let dishId = req.params.dishId;
+
+  var query = `
+    SELECT r.name
+    FROM Recipes r JOIN RecipesOf o ON r.id = o.recipeID
+    WHERE o.dishID = '${dishId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+// recipe profile page routes
+
+function getRecipeNameAndDescription(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT name, description
+    FROM Recipes r
+    WHERE r.id = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeTags(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT t.tag
+    FROM Recipes r JOIN RecipeTags t ON r.id = t.id
+    WHERE r.id = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeIngredients(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT i.name
+    FROM InRecipe r JOIN Ingredients i ON r.ingredientsID = i.id
+    WHERE r.recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeSteps(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT stepNum, instruction
+    FROM Steps
+    WHERE recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeReviews(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT rating, text
+    FROM Reviews
+    WHERE recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRestaurantLinks(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT s.restaurantID
+    FROM RecipesOf r JOIN ServedAt s ON r.dishID = s.dishID
+    WHERE r.recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRestaurantDetails(req, res) {
+  let restId = req.params.id;
+
+
+  var query = `
+  SELECT *
+  FROM Restaurants
+  WHERE id = '${restId}'
+  `;
+
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+function getDishesWithRecipes(req, res) {
+  let restId = req.params.restid;
+
+  var query = `select d.name dishName, d.id dishId from Restaurants r
+  join ServedAt sa on r.id = sa.restaurantID 
+  join Dishes d on d.id = sa.dishID 
+  where r.id = '${restId}'	`;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      var dishes = [];
+      var dishIds = [];
+
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        console.log(row);
+        dishIds.push(row["dishId"]);
+        dishes.push({ dishId: row['dishId'], dishName: row['dishName'] });
       }
-    });
-  };
+
+      var dishidsstr = dishIds.join(',');
+      var query2 = `select d.id dishId, r.id recipeId, r.name recipeName, r.description recipeDescription from Dishes d
+      join RecipeOf ro on ro.dishID = d.id 
+      join Recipes r on r.id  = ro.recipeID 
+      where d.id in (${dishidsstr})`;
+
+      connection.query(query2, function (err, rows, fields) {
+
+        for (var idx = 0; idx < dishes.length; idx++) {
+          var recipesForDish = rows.filter(r => r['dishId'] == dishes[idx].dishId);
+          dishes[idx].recipes = recipesForDish;
+        }
+
+        res.json(dishes);
+      });
+
+
+    }
+  });
+}
+
 // The exported functions, which can be accessed in index.js.
 module.exports = {
   filterRestaurants,
@@ -233,4 +458,14 @@ module.exports = {
   searchRecipes,
   getRecTagOptions,
   getRestaurant,
+  getDishesOfRestaurant,
+  getRecipesOfDish,
+  getRecipeNameAndDescription,
+  getRecipeTags,
+  getRecipeIngredients,
+  getRecipeSteps,
+  getRecipeReviews,
+  getRestaurantLinks,
+  getRestaurantDetails,
+  getDishesWithRecipes
 }

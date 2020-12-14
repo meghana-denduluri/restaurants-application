@@ -18,16 +18,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // The route localhost:8081/genres is registered to the function
 // routes.getAllGenres, specified in routes.js.
 
-app.get('/filterRecipes/:tag',routes.filterRecipes);
-app.get('/searchRecipes/:term',routes.searchRecipes);
-app.get('/getRecTagOptions',routes.getRecTagOptions);
+app.get('/filterRecipes/:tag', routes.filterRecipes);
+app.get('/searchRecipes/:term', routes.searchRecipes);
+app.get('/getRecTagOptions', routes.getRecTagOptions);
 
 
-app.get('/filterRestaurants/:city/:tag',routes.filterRestaurants);
-app.get('/searchRestaurants/:term',routes.searchRestaurants);
-app.get('/getCityOptions/:tag',routes.getCityOptions);
-app.get('/getRestTagOptions/:city',routes.getRestTagOptions);
-app.get('/restaurant/:id',routes.getRestaurant);
+app.get('/filterRestaurants/:city/:tag', routes.filterRestaurants);
+app.get('/searchRestaurants/:term', routes.searchRestaurants);
+app.get('/getCityOptions/:tag', routes.getCityOptions);
+app.get('/getRestTagOptions/:city', routes.getRestTagOptions);
+
+// restaurant profile page routes
+app.get('/restaurant/:id', routes.getRestaurantDetails);
+app.get('/dishesOfRestaurant/:restId', routes.getDishesOfRestaurant);
+app.get('/disheswithrecipes/:restid', routes.getDishesWithRecipes)
+app.get('/recipesOfDish/:dishId', routes.getRecipesOfDish);
+
+// recipe profile page routes
+app.get('/recipeNameAndDescription/:recipeId', routes.getRecipeNameAndDescription);
+app.get('/recipeTags/:recipeId', routes.getRecipeTags);
+app.get('/recipeIngredients/:recipeId', routes.getRecipeIngredients);
+app.get('/recipeSteps/:recipeId', routes.getRecipeSteps);
+app.get('/recipeReviews/:recipeId', routes.getRecipeReviews);
+app.get('/restaurantLinks/:recipeId', routes.getRestaurantLinks);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);

@@ -1,14 +1,19 @@
 import React from "react";
+import DashboardRestaurantRow from './DashboardRestaurantRow';
+import RecipeBriefRow from './RecipeBriefRow';
 
 export default class DishWithRecipesRow extends React.Component {
     constructor(props) {
         super(props);
+        var recipes = props.children;
 
+        let recipeDivs = recipes.map((recipeBriefObj, i) =>
+            <RecipeBriefRow
+                recipeId={recipeBriefObj.recipeId} recipeName={recipeBriefObj.recipeName} recipeDescription={recipeBriefObj.recipeDescription} />
+        );
         this.state = {
             dishName: this.props.dishName,
-            // name: this.props.name,
-            // city: this.props.city,
-            // stars: this.props.stars,
+            recipes: recipeDivs
         };
     }
 
@@ -16,9 +21,8 @@ export default class DishWithRecipesRow extends React.Component {
 
         return (
             <div className="dish">
-                <div className="name">{this.state.dishName}</div>
-
-
+                <div className="name"><b>{this.state.dishName}</b></div>
+                {this.state.recipes}
                 <hr />
             </div>
         );
