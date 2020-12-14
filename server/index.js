@@ -31,6 +31,7 @@ app.get('/getRestTagOptions/:city',routes.getRestTagOptions);
 // restaurant profile page routes
 app.get('/restaurant/:restId', routes.getRestaurant);
 app.get('/dishesOfRestaurant/:restId', routes.getDishesOfRestaurant);
+app.get('/recipesOfDish/:dishId', routes.getRecipesOfDish);
 
 // recipe profile page routes
 

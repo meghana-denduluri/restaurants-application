@@ -234,12 +234,31 @@ function searchRestaurants(req, res) {
 
     var query = `
       WITH t AS (
-        SELECT r.id, s.dishID
+        SELECT s.dishID
         FROM Restaurants r JOIN ServedAt s ON r.id = s.restaurantID
         WHERE r.id = '${restId}'
       )
-      SELECT d.name
+      SELECT d.id, d.name
       FROM t JOIN Dishes d ON t.dishId = d.id;
+      `;
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) console.log(err);
+      else {
+        res.json(rows);
+      }
+    });
+
+  }
+
+  function getRecipesOfDish(req, res) {
+
+    let dishId = req.params.dishId;
+
+    var query = `
+      SELECT r.name
+      FROM Recipes r JOIN RecipesOf o ON r.id = o.recipeID;
+      WHERE o.dishID = '${dishId}'
       `;
 
     connection.query(query, function(err, rows, fields) {
@@ -261,5 +280,6 @@ module.exports = {
   searchRecipes,
   getRecTagOptions,
   getRestaurant,
-  getDishesOfRestaurant
+  getDishesOfRestaurant,
+  getRecipesOfDish
 }
