@@ -30,7 +30,9 @@ app.get('/getRestTagOptions/:city',routes.getRestTagOptions);
 
 // restaurant profile page routes
 app.get('/restaurant/:restId', routes.getRestaurant);
+app.get('/dishesOfRestaurant/:restId', routes.getDishesOfRestaurant);
 
+// recipe profile page routes
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);

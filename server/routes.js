@@ -228,6 +228,29 @@ function searchRestaurants(req, res) {
 
   }
 
+  function getDishesOfRestaurant(req, res) {
+
+    let restId = req.params.restId;
+
+    var query = `
+      WITH t AS (
+        SELECT r.id, s.dishID
+        FROM Restaurants r JOIN ServedAt s ON r.id = s.restaurantID
+        WHERE r.id = '${restId}'
+      )
+      SELECT d.name
+      FROM t JOIN Dishes d ON t.dishId = d.id;
+      `;
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) console.log(err);
+      else {
+        res.json(rows);
+      }
+    });
+
+  }
+
 // The exported functions, which can be accessed in index.js.
 module.exports = {
   filterRestaurants,
@@ -237,5 +260,6 @@ module.exports = {
   filterRecipes,
   searchRecipes,
   getRecTagOptions,
-  getRestaurant
+  getRestaurant,
+  getDishesOfRestaurant
 }
