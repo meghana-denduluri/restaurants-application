@@ -28,6 +28,10 @@ app.get('/searchRestaurants/:term',routes.searchRestaurants);
 app.get('/getCityOptions/:tag',routes.getCityOptions);
 app.get('/getRestTagOptions/:city',routes.getRestTagOptions);
 
+// restaurant profile page routes
+app.get('/restaurant/:restId', routes.getRestaurant);
+
+
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
 });

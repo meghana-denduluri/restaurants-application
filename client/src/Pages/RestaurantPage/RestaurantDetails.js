@@ -45,9 +45,6 @@ export default class RestaurantDetails extends React.Component {
                     lat: rest.lat,
                     long: rest.long
 
-
-
-
                 });
             })
             .then(x => {
