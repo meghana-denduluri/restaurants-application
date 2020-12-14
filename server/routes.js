@@ -280,8 +280,8 @@ function getRecipeNameAndDescription(req, res) {
 
   var query = `
     SELECT name, description
-    FROM Recipes r;
-    WHERE r.id = '${recipeId}'
+    FROM Recipes r
+    WHERE r.id = '${recipeId}';
     `;
 
   connection.query(query, function(err, rows, fields) {
@@ -299,8 +299,65 @@ function getRecipeTags(req, res) {
 
   var query = `
     SELECT t.tag
-    FROM Recipes r JOIN RecipeTags t ON r.id = t.id;
-    WHERE r.id = '${recipeId}'
+    FROM Recipes r JOIN RecipeTags t ON r.id = t.id
+    WHERE r.id = '${recipeId}';
+    `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeIngredients(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT i.name
+    FROM InRecipe r JOIN Ingredients i ON r.ingredientsID = i.id
+    WHERE r.recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeSteps(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT stepNum, instruction
+    FROM Steps
+    WHERE recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeReviews(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT rating, text
+    FROM Reviews
+    WHERE recipeID = '${recipeId}';
     `;
 
   connection.query(query, function(err, rows, fields) {
@@ -325,5 +382,8 @@ module.exports = {
   getDishesOfRestaurant,
   getRecipesOfDish,
   getRecipeNameAndDescription,
-  getRecipeTags
+  getRecipeTags,
+  getRecipeIngredients,
+  getRecipeSteps,
+  getRecipeReviews,
 }
