@@ -180,7 +180,7 @@ function searchRestaurants(req, res) {
       SELECT id, name, description
       FROM Recipes
       NATURAL JOIN RecipeTags
-      where tag = '${tag}%'
+      where tag = '${tag}'
       order by RAND ()
       limit 20;
     `;
