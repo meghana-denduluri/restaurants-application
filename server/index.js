@@ -35,7 +35,7 @@ app.get('/recipesOfDish/:dishId', routes.getRecipesOfDish);
 
 // recipe profile page routes
 app.get('/recipeNameAndDescription/:recipeId', routes.getRecipeNameAndDescription);
-AudioParamMap.get('/recipeTags/:recipeId', routes.getRecipeTags);
+app.get('/recipeTags/:recipeId', routes.getRecipeTags);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
