@@ -1,8 +1,8 @@
 var mysql = require('mysql');
 var connection = mysql.createConnection({
   host: "recipes.cffddarmshqp.us-east-1.rds.amazonaws.com",
-  user: "admin",
-  password: "mmsaeatsbetterpwd",
+  user: "guest",
+  password: "guesteats",
   port: 3306,
   database: "master"
 });
@@ -142,6 +142,251 @@ function searchRestaurants(req, res) {
   });
 };
 
+function searchRecipes(req, res) {
+  let term = req.params.term;
+
+  var query = `
+  SELECT id, name, description
+  FROM Recipes
+  WHERE name LIKE '${term}%'
+  order by name
+  limit 20;
+  `;
+
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+
+function filterRecipes(req, res) {
+  let tag = req.params.tag;
+  if (tag == 'All') {
+
+    var query = `
+    SELECT id, name, description
+    FROM Recipes
+    order by RAND ()
+    limit 20;
+  `;
+  }
+  else {
+    var query = `
+    SELECT id, name, description
+    FROM Recipes
+    NATURAL JOIN RecipeTags
+    where tag = '${tag}'
+    order by RAND ()
+    limit 20;
+  `;
+  }
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+function getRecTagOptions(req, res) {
+
+  var query = `
+    SELECT distinct tag
+    FROM RecipeTags
+    order by tag;
+    `;
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+};
+
+// restaurant profile page routes
+
+function getRestaurant(req, res) {
+
+  let restId = req.params.restId;
+
+  var query = `
+    SELECT name, address, postal_code, city, stars, state, latitude, longitude
+    FROM Restaurants
+    WHERE id = '${restId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getDishesOfRestaurant(req, res) {
+
+  let restId = req.params.restId;
+
+  var query = `
+    WITH t AS (
+      SELECT s.dishID
+      FROM Restaurants r JOIN ServedAt s ON r.id = s.restaurantID
+      WHERE r.id = '${restId}'
+    )
+    SELECT d.id, d.name
+    FROM t JOIN Dishes d ON t.dishId = d.id;
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipesOfDish(req, res) {
+
+  let dishId = req.params.dishId;
+
+  var query = `
+    SELECT r.name
+    FROM Recipes r JOIN RecipesOf o ON r.id = o.recipeID
+    WHERE o.dishID = '${dishId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+// recipe profile page routes
+
+function getRecipeNameAndDescription(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT name, description
+    FROM Recipes r
+    WHERE r.id = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeTags(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT t.tag
+    FROM Recipes r JOIN RecipeTags t ON r.id = t.id
+    WHERE r.id = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeIngredients(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT i.name
+    FROM InRecipe r JOIN Ingredients i ON r.ingredientsID = i.id
+    WHERE r.recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeSteps(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT stepNum, instruction
+    FROM Steps
+    WHERE recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRecipeReviews(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT rating, text
+    FROM Reviews
+    WHERE recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
+function getRestaurantLinks(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT s.restaurantID
+    FROM RecipesOf r JOIN ServedAt s ON r.dishID = s.dishID
+    WHERE r.recipeID = '${recipeId}';
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
+
 function getRestaurantDetails(req, res) {
   let restId = req.params.id;
 
@@ -203,114 +448,6 @@ function getDishesWithRecipes(req, res) {
   });
 }
 
-function searchRecipes(req, res) {
-  let term = req.params.term;
-
-  var query = `
-    SELECT id, name, description
-    FROM Recipes
-    WHERE name LIKE '${term}%'
-    order by name
-    limit 20;
-    `;
-
-
-  connection.query(query, function (err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-};
-
-
-function filterRecipes(req, res) {
-  let tag = req.params.tag;
-  if (tag == 'All') {
-
-    var query = `
-      SELECT id, name, description
-      FROM Recipes
-      order by RAND ()
-      limit 20;
-    `;
-  }
-  else {
-    var query = `
-      SELECT id, name, description
-      FROM Recipes
-      NATURAL JOIN RecipeTags
-      where tag = '${tag}'
-      order by RAND ()
-      limit 20;
-    `;
-  }
-
-  connection.query(query, function (err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-};
-
-function getRecTagOptions(req, res) {
-
-  var query = `
-      SELECT distinct tag
-      FROM RecipeTags
-      order by tag;
-      `;
-  connection.query(query, function (err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-};
-
-function getRestaurant(req, res) {
-
-  let restId = req.params.restId;
-
-  var query = `
-      SELECT name, address, postal_code, city, stars, state, latitude, longitude
-      FROM Restaurants
-      WHERE id = '${restId}';
-      `;
-
-  connection.query(query, function (err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-
-}
-
-function getDishesOfRestaurant(req, res) {
-
-  let restId = req.params.restId;
-
-  var query = `
-      WITH t AS (
-        SELECT r.id, s.dishID
-        FROM Restaurants r JOIN ServedAt s ON r.id = s.restaurantID
-        WHERE r.id = '${restId}'
-      )
-      SELECT d.name
-      FROM t JOIN Dishes d ON t.dishId = d.id;
-      `;
-
-  connection.query(query, function (err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
-
-}
-
 // The exported functions, which can be accessed in index.js.
 module.exports = {
   filterRestaurants,
@@ -322,6 +459,13 @@ module.exports = {
   getRecTagOptions,
   getRestaurant,
   getDishesOfRestaurant,
+  getRecipesOfDish,
+  getRecipeNameAndDescription,
+  getRecipeTags,
+  getRecipeIngredients,
+  getRecipeSteps,
+  getRecipeReviews,
+  getRestaurantLinks,
   getRestaurantDetails,
   getDishesWithRecipes
 }
