@@ -34,6 +34,7 @@ app.get('/dishesOfRestaurant/:restId', routes.getDishesOfRestaurant);
 app.get('/recipesOfDish/:dishId', routes.getRecipesOfDish);
 
 // recipe profile page routes
+app.get('/recipeNameAndDescription/:recipeId', routes.getRecipeNameAndDescription);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
