@@ -9,6 +9,7 @@ import Restaurants from './Pages/RestaurantPage/RestaurantsHome'
 import Recipes from './Pages/RecipePage/RecipesHome'
 import RecipeProfile from './Pages/RecipeProfile'
 import RestaurantDetails from './Pages/RestaurantPage/RestaurantDetails'
+import RecipeDetails from './Pages/RecipePage/RecipeDetails';
 // import Recommendations from './Recommendations';
 // import BestGenres from './BestGenres';
 
@@ -38,6 +39,10 @@ export default class App extends React.Component {
 							render={() => (
 								<Recipes />
 							)}
+						/>
+						<Route
+							path="/recipeProfile/:id"
+							component={RecipeDetails}
 						/>
 						<Route
 							path="/restaurants"
