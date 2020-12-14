@@ -14,12 +14,13 @@ export default class DashboardRestaurantRow extends React.Component {
     };
   }
   render() {
+    var restaurantDetailPageUrl = "/restaurant/" + this.state.id;
     return (
-      <Link className="restaurant" to={"/restaurantProfile/" + this.state.id}>
-        <div className="name">{this.state.name}</div>
+      <div className="restaurant">
+        <div className="name"><a href={restaurantDetailPageUrl}>{this.state.name}</a></div>
         <div className="city">{this.state.city}</div>
         <div className="stars">{this.state.stars}</div>
-        </Link>
+      </div>
     );
   }
 }

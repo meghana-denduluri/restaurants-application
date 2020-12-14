@@ -8,7 +8,7 @@ import Dashboard from './Pages/LandingPage/Dashboard';
 import Restaurants from './Pages/RestaurantPage/RestaurantsHome'
 import Recipes from './Pages/RecipePage/RecipesHome'
 import RecipeProfile from './Pages/RecipeProfile'
-import RestaurantProfile from './Pages/RestaurantProfile'
+import RestaurantDetails from './Pages/RestaurantPage/RestaurantDetails'
 // import Recommendations from './Recommendations';
 // import BestGenres from './BestGenres';
 
@@ -46,16 +46,8 @@ export default class App extends React.Component {
 							)}
 						/>
 						<Route
-							path="/restaurantProfile/:restaurantId"
-							render={(props) => (
-								<RestaurantProfile {...props} />
-							  )}
-						/>
-						<Route
-							path="/recipeProfile/:recipeId"
-							render={(props) => (
-								<RecipeProfile {...props}/>
-							  )}
+							path="/restaurant/:id"
+							component={RestaurantDetails}
 						/>
 					</Switch>
 				</Router>
