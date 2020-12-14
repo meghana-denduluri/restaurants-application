@@ -293,6 +293,24 @@ function getRecipeNameAndDescription(req, res) {
 
 }
 
+function getRecipeTags(req, res) {
+
+  let recipeId = req.params.recipeId;
+
+  var query = `
+    SELECT t.tag
+    FROM Recipes r JOIN RecipeTags t ON r.id = t.id;
+    WHERE r.id = '${recipeId}'
+    `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+
+}
 
 // The exported functions, which can be accessed in index.js.
 module.exports = {
@@ -306,5 +324,6 @@ module.exports = {
   getRestaurant,
   getDishesOfRestaurant,
   getRecipesOfDish,
-  getRecipeNameAndDescription
+  getRecipeNameAndDescription,
+  getRecipeTags
 }
