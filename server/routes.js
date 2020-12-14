@@ -144,7 +144,6 @@ function searchRestaurants(req, res) {
   });
 };
 
-
   function searchRecipes(req, res) {
     let term = req.params.term;
     
