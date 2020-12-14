@@ -56,10 +56,11 @@ export default class Restaurants extends React.Component {
                 // A button which triggers the showMovies function for each genre.
                 let restaurantDivs = restaurantsList.map((restObj, i) =>
                   <DashboardRestaurantRow
-                    key={restObj.id}
-                    name={restObj.name}
-                    city={restObj.city}
-                    stars={restObj.stars}/>
+              id={restObj.id}
+                key={restObj.id}
+                name={restObj.name}
+                city={restObj.city}
+                stars={restObj.stars}/>
                 );
 
 
@@ -134,6 +135,7 @@ searchRestaurants(e) {
             // A button which triggers the showMovies function for each genre.
             let restaurantDivs = restaurantsList.map((restObj, i) =>
               <DashboardRestaurantRow
+              id={restObj.id}
                 key={restObj.id}
                 name={restObj.name}
                 city={restObj.city}
@@ -150,7 +152,7 @@ searchRestaurants(e) {
 
 
 updateTagOptions(city){
-    fetch("http://localhost:8081/getTagOptions/"+city, {
+    fetch("http://localhost:8081/getRestTagOptions/"+city, {
         method: 'GET' // The type of HTTP request.
     })
         .then(res => res.json()) // Convert the response data to a JSON.

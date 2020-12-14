@@ -1,5 +1,7 @@
 import React from "react";
-
+import {
+  Link
+} from "react-router-dom";
 export default class DashboardRestaurantRow extends React.Component {
   constructor(props) {
     super(props);
@@ -11,11 +13,11 @@ export default class DashboardRestaurantRow extends React.Component {
       stars: this.props.stars,
     };
   }
-  
   render() {
+    var restaurantDetailPageUrl = "/restaurant/" + this.state.id;
     return (
       <div className="restaurant">
-        <div className="name">{this.state.name}</div>
+        <div className="name"><a href={restaurantDetailPageUrl}>{this.state.name}</a></div>
         <div className="city">{this.state.city}</div>
         <div className="stars">{this.state.stars}</div>
       </div>

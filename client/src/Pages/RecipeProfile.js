@@ -1,20 +1,15 @@
 import React from 'react'
-import Select from 'react-select'
-import '../LandingPage/landing.css';
-import PageNavbar from '../PageNavbar';
-// import GenreButton from './GenreButton';
-import DashboardRestaurantRow from './DashboardRestaurantRow';
-import './restDash.css';
+import './LandingPage/landing.css';
+import PageNavbar from './PageNavbar';
 
 export default class RecipeProfile extends React.Component {
     constructor(props) {
         super(props);
-
+    
         //Inherit the recipe id from which it will populate the page
         this.state = {
-            recipeId : this.props.id
+            recipeId: this.props.match.params.recipeId
         }
-
 
     }
 
@@ -31,8 +26,8 @@ export default class RecipeProfile extends React.Component {
 
 <div className="Dashboard">
 <       PageNavbar />
+<div className="h1" style={{color: 'white'}}>{this.state.recipeId}</div>
 
-        
           
       </div>
         );
