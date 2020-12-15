@@ -258,7 +258,7 @@ function getRecipesOfDish(req, res) {
 
   var query = `
     SELECT r.name
-    FROM Recipes r JOIN RecipesOf o ON r.id = o.recipeID
+    FROM Recipes r JOIN RecipeOf o ON r.id = o.recipeID
     WHERE o.dishID = '${dishId}';
     `;
 
@@ -374,7 +374,7 @@ function getRestaurantLinks(req, res) {
 
   var query = `
     SELECT s.restaurantID
-    FROM RecipesOf r JOIN ServedAt s ON r.dishID = s.dishID
+    FROM RecipeOf r JOIN ServedAt s ON r.dishID = s.dishID
     WHERE r.recipeID = '${recipeId}';
     `;
 
