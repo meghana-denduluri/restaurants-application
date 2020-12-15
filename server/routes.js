@@ -448,6 +448,22 @@ function getDishesWithRecipes(req, res) {
   });
 }
 
+
+function getIngredientOptions(req, res) {
+  var query = `select i.name from 
+  Ingredients i join InRecipe r on r.ingredientsID=i.id
+  group by i.name
+  order by count(recipeID) desc
+  limit 2000`;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
 // The exported functions, which can be accessed in index.js.
 module.exports = {
   filterRestaurants,
@@ -467,5 +483,6 @@ module.exports = {
   getRecipeReviews,
   getRestaurantLinks,
   getRestaurantDetails,
-  getDishesWithRecipes
+  getDishesWithRecipes,
+  getIngredientOptions
 }

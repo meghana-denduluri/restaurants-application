@@ -19,21 +19,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // routes.getAllGenres, specified in routes.js.
 
 //Shreyas: routes to add.
-// app.get('/getIngredientOptions', routes.getIngredientOptions);
-//Get schema (name) where name is the name of ingredients. Get the 2000 most popular in decreasing order.
 
 // app.get('/filterRecipesIngredientsAny/:ingredientList', routes.filterRecipesIngredientsAny);
-//Get (id,name,description) of recipes that contain ANY of the listed ingredients (use query 5 from report).
+// //Get (id,name,description) of recipes that contain ANY of the listed ingredients (use query 5 from report).
 
 // app.get('/filterRecipesIngredientsAll/:ingredientList', routes.filterRecipesIngredientsAll);
 //Get (id,name,description) of recipes that contain ALL of the listed ingredients (use query 6 from report).
 
 
+//Recipe dashboard routes
+app.get('/getIngredientOptions', routes.getIngredientOptions);
 app.get('/filterRecipesTag/:tag', routes.filterRecipes);
 app.get('/searchRecipes/:term', routes.searchRecipes);
 app.get('/getRecTagOptions', routes.getRecTagOptions);
 
-
+//Restaurant dashboard routes
 app.get('/filterRestaurants/:city/:tag', routes.filterRestaurants);
 app.get('/searchRestaurants/:term', routes.searchRestaurants);
 app.get('/getCityOptions/:tag', routes.getCityOptions);

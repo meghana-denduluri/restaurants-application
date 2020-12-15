@@ -16,7 +16,7 @@ export default class Recipes extends React.Component {
             recipes : [],
             tagOptions : [],
             searchTag: 'All',
-            ingredientList: ['ye','ya','yoo'],
+            ingredientList: [],
             ingredientOptions: [],
             ingredientFilterType: 'Any'
         }
@@ -203,6 +203,7 @@ updateTagOptions(){
 }
 
 updateIngredientOptions(){
+
   fetch("http://localhost:8081/getIngredientOptions", {
       method: 'GET' // The type of HTTP request.
   })
@@ -287,10 +288,13 @@ updateIngredientOptions(){
 </div>
 <br></br> 
 <div className="search_bar">
-                <div className="h5"> Ingredients </div>
+                <div className="h5"> Ingredients (select up to 3):</div>
 
-                  <span style={{'display':'inline'}}><button onClick={this.updateIngredientFilterType}>{this.state.ingredientFilterType}</button>
-                  <div style={{'padding-left':'5em'}}>{this.state.ingredientList.toString()}</div></span>
+                  <span className="button-span"><button style={{'padding-right':'5em'}} onClick={this.updateIngredientFilterType}>{this.state.ingredientFilterType}</button>
+                  <button style={{'padding-right':'5em'}} onClick={()=>this.setState({
+                  ingredientList:[]
+          })}>clear</button></span>
+                  <div >Ingredients List: {this.state.ingredientList.toString()}</div>
                 <Select
                     options={this.state.ingredientOptions}
                     onChange={this.selectIngredient}
