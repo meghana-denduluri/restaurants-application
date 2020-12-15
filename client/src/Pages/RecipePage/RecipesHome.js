@@ -17,11 +17,9 @@ export default class Recipes extends React.Component {
             tagOptions : [],
             searchTag: 'All',
             ingredientList: [],
-            ingredientOptions: [],
-            ingredientFilterType: 'Any'
+            ingredientOptions: []
         }
 
-    this.updateIngredientFilterType = this.updateIngredientFilterType.bind(this);
 
     this.updateTagOptions = this.updateTagOptions.bind(this);
 
@@ -49,24 +47,11 @@ export default class Recipes extends React.Component {
                 this.updateIngredientOptions()
     }
     
-    updateIngredientFilterType(){
-      if (this.state.ingredientFilterType=='Any'){
-      this.setState({
-        ingredientFilterType:'All'
-      })
-    }
-      else {
-        this.setState({
-          ingredientFilterType:'Any'
-        })
-      }
-      this.filterRecipesIngredients(this.state.ingredientList)
-    }
 
     filterRecipesIngredients(ingredientList)  {
 
         
-      fetch("http://localhost:8081/filterRecipesIngredients" + this.state.ingredientFilterType+'/'+ ingredientList.toString()  ,{
+      fetch("http://localhost:8081/filterRecipesIngredients/"+ ingredientList.toString()  ,{
           method: 'GET' // The type of HTTP request.
       })
           .then(res => res.json()) // Convert the response data to a JSON.
@@ -290,10 +275,10 @@ updateIngredientOptions(){
 <div className="search_bar">
                 <div className="h5"> Ingredients (select up to 3):</div>
 
-                  <span className="button-span"><button style={{'padding-right':'5em'}} onClick={this.updateIngredientFilterType}>{this.state.ingredientFilterType}</button>
+                  <span className="button-span">
                   <button style={{'padding-right':'5em'}} onClick={()=>this.setState({
                   ingredientList:[]
-          })}>clear</button></span>
+          })}>Clear</button></span>
                   <div >Ingredients List: {this.state.ingredientList.toString()}</div>
                 <Select
                     options={this.state.ingredientOptions}
