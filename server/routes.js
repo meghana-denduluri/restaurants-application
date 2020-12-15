@@ -401,7 +401,39 @@ function getRestaurantDetails(req, res) {
   connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
     else {
-      res.json(rows);
+      var restaurants = [];
+      for (var idx = 0; idx < rows.length; idx++) {
+        row = rows[idx];
+        restaurants.push({
+          id: row['id'], name: row['name'], address: row['address'], city: row['city'],
+          state: row['state'], postal_coe: row['postal_code'], latitude: row['latitude'],
+          longitude: row['longitude'], stars: row['stars']
+        });
+      }
+      var categoriesQuery = `SELECT categories FROM RestaurantCategories rc
+        WHERE id = '${restId}'`;
+
+
+      connection.query(categoriesQuery, function (err, rows, fields) {
+        if (err) { console.log(err); }
+        else {
+
+          for (var idx = 0; idx < restaurants.length; idx++) {
+
+            console.log(">>>> " + rows.length);
+            var categories = [];
+            for (var j = 0; j < rows.length; j++) {
+              categories.push(rows[j].categories);
+            }
+            restaurants[idx].categories = categories;
+          }
+
+          res.json(restaurants);
+
+        }
+      });
+
+
     }
   });
 }
@@ -448,6 +480,22 @@ function getDishesWithRecipes(req, res) {
   });
 }
 
+function getReviewsOfRestaurant(req, res) {
+  let restId = req.params.restid;
+
+  var query = `
+    SELECT rating, text FROM Reviews
+    WHERE RestaurantID = '${restId}'
+    `;
+
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
 // The exported functions, which can be accessed in index.js.
 module.exports = {
   filterRestaurants,
@@ -467,5 +515,6 @@ module.exports = {
   getRecipeReviews,
   getRestaurantLinks,
   getRestaurantDetails,
-  getDishesWithRecipes
+  getDishesWithRecipes,
+  getReviewsOfRestaurant
 }
