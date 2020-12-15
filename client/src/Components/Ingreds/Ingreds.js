@@ -6,12 +6,12 @@ export default class Ingreds extends React.Component {
         super(props);
       }
     render() {
-        var ingreds = [];
-        var arr = this.props.ingreds.split(",").map(function(item) {
-            return item.trim();
+        var ingreds = [], arr =[];
+        this.props.ingreds.map(function(item) {
+            arr.push(item.name);
         });
         for (var i = 0; i < arr.length; i++) {
-            ingreds.push(<div className='ingreds' key={i}>{arr[i]}</div>);
+            ingreds.push(<span className='ingreds' key={i}>{arr[i]}</span>);
         }
         return ingreds;
     }

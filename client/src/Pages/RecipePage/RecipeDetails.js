@@ -5,7 +5,8 @@ import '../RestaurantPage/restDash.css';
 import './recipe.css'
 import Tags from '../../Components/Tags/Tags';
 import Ingreds from '../../Components/Ingreds/Ingreds'
-import Steps from '../../Components/Steps/Steps'
+import Steps from '../../Components/Steps/Steps';
+import Review from '../../Components/Review/Review'
 
 export default class RecipeDetails extends React.Component {
 
@@ -14,58 +15,96 @@ export default class RecipeDetails extends React.Component {
         this.state = {
 
         }
+        this.getRecipeNameAndDescription = this.getRecipeNameAndDescription.bind(this);
+        this.getRecipeTags = this.getRecipeTags.bind(this);
+        this.getRecipeIngredients = this.getRecipeIngredients.bind(this);
+        this.getRecipeSteps = this.getRecipeSteps.bind(this);
+        this.getRecipeReviews = this.getRecipeReviews.bind(this);
+        this.getRestaurantLinks = this.getRestaurantLinks.bind(this);
     }
     
     componentDidMount() {
-
-        var restId = this.props.match.params.id;
-        console.log(restId);
-        fetch("http://localhost:8081/restaurant/" + restId, {
-            method: 'GET' // The type of HTTP request.
+        var recipeId = this.props.match.params.id;
+        this.getRecipeNameAndDescription(recipeId);
+        this.getRecipeTags(recipeId);
+        this.getRecipeIngredients(recipeId);
+        this.getRecipeSteps(recipeId);
+        this.getRecipeReviews(recipeId);
+        this.getRestaurantLinks(recipeId);
+    }
+    getRecipeNameAndDescription (val) {
+        fetch("http://localhost:8081/recipeNameAndDescription/" + val, {
+            method: 'GET'
         })
-            .then(res => res.json()) // Convert the response data to a JSON.
-            .then(restaurantsDetails => {
-
-
-                var rest = restaurantsDetails[0];
-                // this.setState({
-                //     name: rest.name,
-                //     address: rest.address,
-                //     postalCode: rest.postal_code,
-                //     city: rest.city,
-                //     stars: rest.stars,
-                //     state: rest.state,
-                //     lat: rest.lat,
-                //     long: rest.long
-
-
-
-
-                // });
+            .then(res => res.json())
+            .then(resp => {
+                var rest = resp[0];
+                this.setState({
+                    name: rest.name,
+                    description: rest.description
+                });
             })
-            .then(x => {
-                fetch("http://localhost:8081/disheswithrecipes/" + restId, {
-                    method: 'GET' // The type of HTTP request.
-                })
-                    .then(res => res.json()) // Convert the response data to a JSON.
-                    .then(dishList => {
-                        if (!dishList) {
-                            return;
-                        }
+    }
+    getRecipeTags (val) {
+        fetch("http://localhost:8081/recipeTags/" + val, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(resp => {
+            this.setState({
+                tags: resp,
+            });
+        })
+        
+    }
 
-                        // let dishDivs = dishList.map((dishObj, i) =>
-                        //     <DishWithRecipesRow
-                        //         dishName={dishObj.dishName} />
-                        // );
-                        // Set the state of the genres list to the value returned by the HTTP response from the server.
-                        // this.setState({
-                        //     dishes: dishDivs
+    getRecipeIngredients (val) {
+        fetch("http://localhost:8081/recipeIngredients/" + val, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(resp => {
+            this.setState({
+                ingreds: resp,
+            });
+        })
+    }
 
-                        // })
-                    })
-            })
+    getRecipeSteps (val) {
+        fetch("http://localhost:8081/recipeSteps/" + val, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(resp => {
+            this.setState({
+                steps: resp
+            });
+            console.log(this.state.steps)
+        })
+    }
 
+    getRecipeReviews (val) {
+        fetch("http://localhost:8081/recipeReviews/" + val, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(resp => {
+            this.setState({
+                reviews: resp
+            });
+        }) 
+    }
 
+    getRestaurantLinks (val) {
+        fetch("http://localhost:8081/restaurantLinks/" + val, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(resp => {
+            this.setState({
+                links: resp
+            });
+        }) 
     }
 
 
@@ -79,21 +118,19 @@ export default class RecipeDetails extends React.Component {
                     <div className="row">
                         <div className="left-section col-10 border-right">
                             <div className="h3 mt-3">
-                                Beef Stack
+                                {this.state.name}
                             </div>
                             <div className="tags-container">
-                                <Tags tags={'comma, separated, values, separated, values, separated, values'}/>
+                                {this.state.tags !== undefined && <Tags tags={this.state.tags}/>}
+                                
                             </div>
                             <div className="description-container mt-4">
                                 <div className="h4">Description</div>
-                                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more - or - less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.Many desktop publishing packages and web page editors now use Lorem Ipsum as their
-                                default model text, and a search
-                                for 'lorem ipsum'
-                                will uncover many web sites still in their infancy.Various versions have evolved over the years, sometimes by accident, sometimes on purpose(injected humour and the like).
+                                {this.state.description}
                             </div>
                             <div className="steps-container mt-4">
                                 <div className="h4">Steps</div>
-                                <Steps steps={'1: laeufneaoiafeaefafwevwev efwef wegwefw wegfwefw wegwefq3wec wewfqewfq wefqewcwqegetgr efrqefwqecf, 2: awfawfaefae'} />
+                                {this.state.steps !== undefined && <Steps steps={this.state.steps}/>}
                             </div>
                         </div>
                         <div className="right-section col-2">
@@ -101,7 +138,7 @@ export default class RecipeDetails extends React.Component {
                                 Ingrediants
                             </div>
                             <div className="tags-container">
-                                <Ingreds ingreds={'comma, separated, values, separated, values, separated, values'}/>
+                                {this.state.ingreds !== undefined && <Ingreds ingreds={this.state.ingreds}/>}
                             </div>
                             <div className="h3 mt-5">
                                 Restaurants that serve this dish...
@@ -111,6 +148,9 @@ export default class RecipeDetails extends React.Component {
                     <div className="reviews-section">
                         <div className="h3 mt-3">
                             Reviews
+                        </div>
+                        <div className="mt-2">
+                            {this.state.reviews !== undefined && <Review review={this.state.reviews}/>}
                         </div>
                     </div>
                 </div>

@@ -6,12 +6,12 @@ export default class Steps extends React.Component {
         super(props);
       }
     render() {
-        var steps = [];
-        var arr = this.props.steps.split(",").map(function(item) {
-            return item.trim();
+        var steps = [], arr = [];
+        this.props.steps.map(function(item) {
+            arr.push(item);
         });
         for (var i = 0; i < arr.length; i++) {
-            steps.push(<div className='steps' key={i}>Step {arr[i]}</div>);
+            steps.push(<div className='steps' key={i}>Step {arr[i].stepNum}: {arr[i].instruction}</div>);
         }
         return steps;
     }
