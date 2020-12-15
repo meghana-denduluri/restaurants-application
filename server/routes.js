@@ -454,7 +454,7 @@ function getIngredientOptions(req, res) {
   Ingredients i join InRecipe r on r.ingredientsID=i.id
   group by i.name
   order by count(recipeID) desc
-  limit 2000`;
+  limit 1000`;
 
   connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
@@ -467,16 +467,19 @@ function getIngredientOptions(req, res) {
 function filterRecipesIngredients(req, res) {
   
   let ingredientsList = req.params.ingredients;
-  let ingredientsArray = ingredientsList.toArray(', ');
+  let ingredientsArray = ingredientsList.split(',');
+  console.log(ingredientsArray);
   let ingredients = '(';
   for (let i = 0; i < ingredientsArray.length; i++) {
-    if (i == ingridientsArray.length - 1) {
-      ingredients.concat("'", ingredientsArray[i], "')");
+    if (i == ingredientsArray.length - 1) {
+      ingredients = ingredients.concat("'", ingredientsArray[i], "')");
     } else {
-      ingredients.concat("'", ingredientsArray[i], "', ");
+      ingredients = ingredients.concat("'", ingredientsArray[i], "', ");
     }
 
   }
+  
+  console.log(ingredients);
 
   var query = `
     WITH ids AS (
@@ -484,20 +487,22 @@ function filterRecipesIngredients(req, res) {
       FROM Recipes r 
       JOIN InRecipe i ON i.recipeID = r.id
       JOIN Ingredients n ON i.ingredientsID = n.id
-      WHERE n.name = '${ingredients}'
+      WHERE n.name in ${ingredients}
       GROUP BY r.id
-      HAVING COUNT(n.id) = '${ingredientsArray.length}'
+      HAVING COUNT(n.id) = ${ingredientsArray.length}
     )
     SELECT *
-    FROM Recipes NATURAL JOIN ids;
+    FROM Recipes NATURAL JOIN ids
+    ORDER BY RAND ()
+    LIMIT 20;
     `;
 
-    connection.query(query, function (err, rows, fields) {
-      if (err) console.log(err);
-      else {
-        res.json(rows);
-      }
-    });
+  connection.query(query, function (err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
 
 }
 
