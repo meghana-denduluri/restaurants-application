@@ -30,6 +30,7 @@ app.get('/getIngredientOptions', routes.getIngredientOptions);
 app.get('/filterRecipesTag/:tag', routes.filterRecipes);
 app.get('/searchRecipes/:term', routes.searchRecipes);
 app.get('/getRecTagOptions', routes.getRecTagOptions);
+app.get('/filterRecipesIngredients/:ingredients', routes.filterRecipesIngredients);
 
 //Restaurant dashboard routes
 app.get('/filterRestaurants/:city/:tag', routes.filterRestaurants);

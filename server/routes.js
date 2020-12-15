@@ -464,6 +464,43 @@ function getIngredientOptions(req, res) {
   });
 }
 
+function filterRecipesIngredients(req, res) {
+  
+  let ingredientsList = req.params.ingredients;
+  let ingredientsArray = ingredientsList.toArray(', ');
+  let ingredients = '(';
+  for (let i = 0; i < ingredientsArray.length; i++) {
+    if (i == ingridientsArray.length - 1) {
+      ingredients.concat("'", ingredientsArray[i], "')");
+    } else {
+      ingredients.concat("'", ingredientsArray[i], "', ");
+    }
+
+  }
+
+  var query = `
+    WITH ids AS (
+      SELECT r.id
+      FROM Recipes r 
+      JOIN InRecipe i ON i.recipeID = r.id
+      JOIN Ingredients n ON i.ingredientsID = n.id
+      WHERE n.name = '${ingredients}'
+      GROUP BY r.id
+      HAVING COUNT(n.id) = '${ingredientsArray.length}'
+    )
+    SELECT *
+    FROM Recipes NATURAL JOIN ids;
+    `;
+
+    connection.query(query, function (err, rows, fields) {
+      if (err) console.log(err);
+      else {
+        res.json(rows);
+      }
+    });
+
+}
+
 // The exported functions, which can be accessed in index.js.
 module.exports = {
   filterRestaurants,
@@ -484,5 +521,6 @@ module.exports = {
   getRestaurantLinks,
   getRestaurantDetails,
   getDishesWithRecipes,
-  getIngredientOptions
+  getIngredientOptions,
+  filterRecipesIngredients
 }

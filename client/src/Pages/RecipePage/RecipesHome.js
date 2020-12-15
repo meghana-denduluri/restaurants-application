@@ -119,6 +119,7 @@ export default class Recipes extends React.Component {
         if (this.state.ingredientList.length < 3){
         let ingredient = e.value
         let ingredientList = [...this.state.ingredientList, ingredient]
+        console.log(ingredientList.toString());
         this.setState({
           ingredientList
         });
