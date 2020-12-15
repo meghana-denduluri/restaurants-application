@@ -29,7 +29,7 @@ export default class App extends React.Component {
 						/>
 						<Route
 							exact
-							path="/websitename"
+							path="/2DIY4"
 							render={() => (
 								<Dashboard />
 							)}

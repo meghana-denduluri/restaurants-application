@@ -377,6 +377,7 @@ function getRestaurantLinks(req, res) {
     FROM RecipeOf r JOIN ServedAt s ON r.dishID = s.dishID
     INNER JOIN Restaurants res on res.id = s.restaurantID
     WHERE r.recipeID = '${recipeId}'
+    ORDER BY res.stars DESC
     LIMIT 10;
     `;
 
