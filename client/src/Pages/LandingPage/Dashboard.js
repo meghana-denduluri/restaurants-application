@@ -1,8 +1,6 @@
 import React from 'react';
 import './landing.css';
 import myImg from '../../assets/food.jpg';
-import RestaurantHome from '../RestaurantPage/RestaurantsHome'
-import RecipesHome from '../RecipePage/RecipesHome'
 //import PageNavbar from '../PageNavbar';
 // import GenreButton from './GenreButton';
 
@@ -58,8 +56,6 @@ export default class Dashboard extends React.Component {
                         </a>
                     </div>
                 </section>
-                <RestaurantHome />
-                <RecipesHome />
             </div>
         );
     }
