@@ -26,3 +26,4 @@ yarn-error.log*
 .eslintcache
 Icon
 .DS_Store
+node_modules
