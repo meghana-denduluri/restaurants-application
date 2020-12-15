@@ -6,7 +6,8 @@ import './recipe.css'
 import Tags from '../../Components/Tags/Tags';
 import Ingreds from '../../Components/Ingreds/Ingreds'
 import Steps from '../../Components/Steps/Steps';
-import Review from '../../Components/Review/Review'
+import Review from '../../Components/Review/Review';
+import Links from '../../Components/Links/Links';
 
 export default class RecipeDetails extends React.Component {
 
@@ -104,6 +105,7 @@ export default class RecipeDetails extends React.Component {
             this.setState({
                 links: resp
             });
+            console.log('links',this.state.links)
         }) 
     }
 
@@ -142,6 +144,10 @@ export default class RecipeDetails extends React.Component {
                             </div>
                             <div className="h3 mt-5">
                                 Restaurants that serve this dish...
+                                <div className="links-container">
+                                    {this.state.links !== undefined && <Links links={this.state.links}/>}
+                                </div>
+
                             </div>
                         </div>
                     </div>                  
@@ -154,17 +160,6 @@ export default class RecipeDetails extends React.Component {
                         </div>
                     </div>
                 </div>
-                {/* <div className="name">{this.state.name}</div>
-                <div className="city">{this.state.city} ({this.state.state})</div>
-
-                <div className="address">{this.state.address} ({this.state.postalCode})</div>
-                <br />
-                <div className="stars">Rating: {this.state.stars} stars</div>
-
-                <br />
-
-                <h2>Dishes:</h2>
-                {this.state.dishes} */}
             </div>
         );
     }

@@ -373,9 +373,11 @@ function getRestaurantLinks(req, res) {
   let recipeId = req.params.recipeId;
 
   var query = `
-    SELECT s.restaurantID
+    SELECT s.restaurantID, res.name
     FROM RecipeOf r JOIN ServedAt s ON r.dishID = s.dishID
-    WHERE r.recipeID = '${recipeId}';
+    INNER JOIN Restaurants res on res.id = s.restaurantID
+    WHERE r.recipeID = '${recipeId}'
+    LIMIT 10;
     `;
 
   connection.query(query, function (err, rows, fields) {
