@@ -18,6 +18,7 @@ export default class Restaurants extends React.Component {
             tagOptions: [],
             searchCity: 'All',
             searchTag: 'All',
+            dishToggle: 'On'
         }
 
         this.updateCityOptions = this.updateCityOptions.bind(this);
@@ -30,21 +31,23 @@ export default class Restaurants extends React.Component {
 
         this.filterRestaurants = this.filterRestaurants.bind(this)
 
+        this.updateDishToggle = this.updateDishToggle.bind(this)
+
     }
 
     // React function that is called when the page load.
     componentDidMount() {
 
-        this.filterRestaurants('All', 'All');
+        this.filterRestaurants('All', 'All','On');
 
         this.updateCityOptions('All');
         this.updateTagOptions('All');
 
     }
 
-    filterRestaurants(city, tag) {
+    filterRestaurants(city, tag, toggle) {
 
-        fetch("http://localhost:8081/filterRestaurants/" + city + "/" + tag, {
+        fetch("http://localhost:8081/filterRestaurants/" + city + "/" + tag + "/" + toggle, {
             method: 'GET' // The type of HTTP request.
         })
             .then(res => res.json()) // Convert the response data to a JSON.
@@ -77,7 +80,7 @@ export default class Restaurants extends React.Component {
         this.setState({
             searchCity: city
         });
-        this.filterRestaurants(city, this.state.searchTag);
+        this.filterRestaurants(city, this.state.searchTag, this.state.dishToggle);
         this.updateTagOptions(city)
 
     }
@@ -87,7 +90,7 @@ export default class Restaurants extends React.Component {
         this.setState({
             searchTag: tag
         });
-        this.filterRestaurants(this.state.searchCity, tag);
+        this.filterRestaurants(this.state.searchCity, tag, this.state.dishToggle);
         this.updateCityOptions(tag)
     }
 
@@ -180,6 +183,21 @@ export default class Restaurants extends React.Component {
             })
     }
 
+    updateDishToggle (){
+        if (this.state.dishToggle=='On'){
+            this.setState({
+                dishToggle: 'Off'
+        })
+        this.filterRestaurants(this.state.searchCity, this.state.searchTag, 'Off');
+    }
+        else {
+            this.setState({
+                dishToggle: 'On'
+        })
+        this.filterRestaurants(this.state.searchCity, this.state.searchTag, 'On')
+        }
+        
+    }
 
     render() {
         return (
@@ -197,6 +215,7 @@ export default class Restaurants extends React.Component {
                 <div className="h4">Explore</div>
                     <div className="explore-section">
                         <div className="search_bar col-6">
+                        <span><div>Restaurants with dish info</div> <button  onClick={this.updateDishToggle}>{this.state.dishToggle}</button></span> 
                             <div className=""> City </div>
                             <Select
                                 options={this.state.cityOptions}

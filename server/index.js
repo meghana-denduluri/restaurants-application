@@ -27,13 +27,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //Recipe dashboard routes
 app.get('/getIngredientOptions', routes.getIngredientOptions);
-app.get('/filterRecipesTag/:tag', routes.filterRecipes);
+app.get('/filterRecipesTag/:tag/:toggle', routes.filterRecipes);
 app.get('/searchRecipes/:term', routes.searchRecipes);
 app.get('/getRecTagOptions', routes.getRecTagOptions);
-app.get('/filterRecipesIngredients/:ingredients', routes.filterRecipesIngredients);
+app.get('/filterRecipesIngredients/:ingredients/:toggle', routes.filterRecipesIngredients);
 
 //Restaurant dashboard routes
-app.get('/filterRestaurants/:city/:tag', routes.filterRestaurants);
+app.get('/filterRestaurants/:city/:tag/:toggle', routes.filterRestaurants);
 app.get('/searchRestaurants/:term', routes.searchRestaurants);
 app.get('/getCityOptions/:tag', routes.getCityOptions);
 app.get('/getRestTagOptions/:city', routes.getRestTagOptions);

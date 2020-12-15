@@ -17,9 +17,11 @@ export default class Recipes extends React.Component {
             tagOptions : [],
             searchTag: 'All',
             ingredientList: [],
-            ingredientOptions: []
+            ingredientOptions: [],
+            restaurantToggle: 'On'
         }
 
+    this.updateRestaurantToggle = this.updateRestaurantToggle.bind(this)
 
     this.updateTagOptions = this.updateTagOptions.bind(this);
 
@@ -40,18 +42,33 @@ export default class Recipes extends React.Component {
     // React function that is called when the page load.
     componentDidMount()  {
         
-                this.filterRecipesTags('All');
+                this.filterRecipesTags('All', 'On');
             
                 this.updateTagOptions();
 
                 this.updateIngredientOptions()
     }
     
+    updateRestaurantToggle (){
+      if (this.state.restaurantToggle=='On'){
+          this.setState({
+              restaurantToggle: 'Off'
+      })
+      this.filterRecipesTags(this.state.searchTag, 'Off');
+  }
+      else {
+          this.setState({
+            restaurantToggle: 'On'
+      })
+      this.filterRecipesTags(this.state.searchTag, 'On');
+      }
+      
+  }
 
-    filterRecipesIngredients(ingredientList)  {
+    filterRecipesIngredients(ingredientList, restaurantToggle)  {
 
         
-      fetch("http://localhost:8081/filterRecipesIngredients/"+ ingredientList.toString()  ,{
+      fetch("http://localhost:8081/filterRecipesIngredients/"+ ingredientList.toString() + '/' + restaurantToggle  ,{
           method: 'GET' // The type of HTTP request.
       })
           .then(res => res.json()) // Convert the response data to a JSON.
@@ -77,9 +94,9 @@ export default class Recipes extends React.Component {
           })
   }
 
-    filterRecipesTags(tag)  {
+    filterRecipesTags(tag, restaurantToggle)  {
         
-        fetch("http://localhost:8081/filterRecipesTag/"+  tag ,{
+        fetch("http://localhost:8081/filterRecipesTag/"+  tag + '/' + restaurantToggle ,{
             method: 'GET' // The type of HTTP request.
         })
             .then(res => res.json()) // Convert the response data to a JSON.
@@ -112,7 +129,7 @@ export default class Recipes extends React.Component {
         this.setState({
             searchTag: tag
         });
-        this.filterRecipesTags(tag);
+        this.filterRecipesTags(tag, this.state.restaurantToggle );
         }
     
       selectIngredient=(e)=> {
@@ -123,7 +140,7 @@ export default class Recipes extends React.Component {
         this.setState({
           ingredientList
         });
-        this.filterRecipesIngredients(ingredientList);
+        this.filterRecipesIngredients(ingredientList, this.state.restaurantToggle);
         }
       }
       
@@ -227,14 +244,18 @@ updateIngredientOptions(){
         <br></br>
         
         <div className="container movies-container">
+          
         <div className="columns">
+          
           <div className="jumbotron">
             <div className="h3">Explore</div>
+            <div>Recipes with restaurant info</div> <button className='Toggle'  onClick={this.updateRestaurantToggle}>{this.state.restaurantToggle}</button>
             <div className="search-container">
             
 <br></br>
 
                 <div className="search_bar">
+                  
                 <div className="h5"> Tag </div>
                 <Select
                     options={this.state.tagOptions}
