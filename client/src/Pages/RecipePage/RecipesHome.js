@@ -16,30 +16,70 @@ export default class Recipes extends React.Component {
             recipes : [],
             tagOptions : [],
             searchTag: 'All',
+            ingredientList: [],
+            ingredientOptions: []
         }
+
 
     this.updateTagOptions = this.updateTagOptions.bind(this);
 
+    this.updateIngredientOptions = this.updateIngredientOptions.bind(this);
+
     this.selectTag = this.selectTag.bind(this);
+
+    this.selectIngredient = this.selectIngredient.bind(this);
 
     this.searchRecipes = this.searchRecipes.bind(this)
 
-    this.filterRecipes = this.filterRecipes.bind(this)
+    this.filterRecipesTags = this.filterRecipesTags.bind(this)
+
+    this.filterRecipesIngredients = this.filterRecipesIngredients.bind(this)
 
     }
 
     // React function that is called when the page load.
     componentDidMount()  {
         
-                this.filterRecipes('All');
+                this.filterRecipesTags('All');
             
-                this.updateTagOptions('All');
-            
+                this.updateTagOptions();
+
+                this.updateIngredientOptions()
     }
     
-    filterRecipes(tag)  {
+
+    filterRecipesIngredients(ingredientList)  {
+
         
-        fetch("http://localhost:8081/filterRecipes/"+  tag ,{
+      fetch("http://localhost:8081/filterRecipesIngredients/"+ ingredientList.toString()  ,{
+          method: 'GET' // The type of HTTP request.
+      })
+          .then(res => res.json()) // Convert the response data to a JSON.
+          .then(recipesList => {
+              if (!recipesList) {
+                  return;
+              }
+              // Map each genreObj in genreList to an HTML element:
+              // A button which triggers the showMovies function for each genre.
+              let recipes = recipesList.map((restObj, i) =>
+              <DashboardRecipeRow
+              id={restObj.id}
+                key={restObj.id}
+                name={restObj.name}
+                descr={restObj.description}/>
+              );
+
+
+              // Set the state of the genres list to the value returned by the HTTP response from the server.
+              this.setState({
+                recipes
+              })
+          })
+  }
+
+    filterRecipesTags(tag)  {
+        
+        fetch("http://localhost:8081/filterRecipesTag/"+  tag ,{
             method: 'GET' // The type of HTTP request.
         })
             .then(res => res.json()) // Convert the response data to a JSON.
@@ -72,8 +112,20 @@ export default class Recipes extends React.Component {
         this.setState({
             searchTag: tag
         });
-        this.filterRecipes(tag);
+        this.filterRecipesTags(tag);
         }
+    
+      selectIngredient=(e)=> {
+        if (this.state.ingredientList.length < 3){
+        let ingredient = e.value
+        let ingredientList = [...this.state.ingredientList, ingredient]
+        this.setState({
+          ingredientList
+        });
+        this.filterRecipesIngredients(ingredientList);
+        }
+      }
+      
 
 
 
@@ -135,6 +187,33 @@ updateTagOptions(){
         })
 }
 
+updateIngredientOptions(){
+
+  fetch("http://localhost:8081/getIngredientOptions", {
+      method: 'GET' // The type of HTTP request.
+  })
+      .then(res => res.json()) // Convert the response data to a JSON.
+      .then(ingredientList => {
+          if (!ingredientList) {
+              return;
+          }
+
+          let ingredientOptions = []
+
+          for (var i = 0; i < ingredientList.length; i++) {
+            ingredientOptions.push({
+              label: ingredientList[i].name,
+              value: ingredientList[i].name
+              });
+          }
+          // Set the state of the genres list to the value returned by the HTTP response from the server.
+          this.setState({
+            ingredientOptions
+          })
+
+      })
+}
+
 
     render() {
         return (
@@ -163,6 +242,7 @@ updateTagOptions(){
                     openMenuOnClick={true}
                 />        </div>
                <br></br> 
+               
 
             </div>
           </div>
@@ -190,9 +270,24 @@ updateTagOptions(){
                 id="movieName"
                 className="movie-input"
               />
+</div>
+<br></br> 
+<div className="search_bar">
+                <div className="h5"> Ingredients (select up to 3):</div>
 
-
-            </div>
+                  <span className="button-span">
+                  <button style={{'padding-right':'5em'}} onClick={()=>this.setState({
+                  ingredientList:[]
+          })}>Clear</button></span>
+                  <div >Ingredients List: {this.state.ingredientList.toString()}</div>
+                <Select
+                    options={this.state.ingredientOptions}
+                    onChange={this.selectIngredient}
+                    placeholder= "Search ingredients..."
+                    openMenuOnClick={true}
+                />        </div>
+               
+            
           </div>
           </div>
 

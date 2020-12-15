@@ -18,11 +18,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // The route localhost:8081/genres is registered to the function
 // routes.getAllGenres, specified in routes.js.
 
-app.get('/filterRecipes/:tag', routes.filterRecipes);
+//Shreyas: route to add.
+
+// app.get('/filterRecipesIngredients/:ingredientList', routes.filterRecipesIngredients);
+//Get (id,name,description) of recipes that contain ALL of the listed ingredients (use query 6 from report).
+//ingredientList is given as a string in the form: ingr1,ingr2,ingr3 of length 0-3
+
+
+//Recipe dashboard routes
+app.get('/getIngredientOptions', routes.getIngredientOptions);
+app.get('/filterRecipesTag/:tag', routes.filterRecipes);
 app.get('/searchRecipes/:term', routes.searchRecipes);
 app.get('/getRecTagOptions', routes.getRecTagOptions);
 
-
+//Restaurant dashboard routes
 app.get('/filterRestaurants/:city/:tag', routes.filterRestaurants);
 app.get('/searchRestaurants/:term', routes.searchRestaurants);
 app.get('/getCityOptions/:tag', routes.getCityOptions);
