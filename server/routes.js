@@ -258,7 +258,7 @@ function getRecipesOfDish(req, res) {
 
   var query = `
     SELECT r.name
-    FROM Recipes r JOIN RecipesOf o ON r.id = o.recipeID
+    FROM Recipes r JOIN RecipeOf o ON r.id = o.recipeID
     WHERE o.dishID = '${dishId}';
     `;
 
@@ -373,9 +373,11 @@ function getRestaurantLinks(req, res) {
   let recipeId = req.params.recipeId;
 
   var query = `
-    SELECT s.restaurantID
-    FROM RecipesOf r JOIN ServedAt s ON r.dishID = s.dishID
-    WHERE r.recipeID = '${recipeId}';
+    SELECT s.restaurantID, res.name
+    FROM RecipeOf r JOIN ServedAt s ON r.dishID = s.dishID
+    INNER JOIN Restaurants res on res.id = s.restaurantID
+    WHERE r.recipeID = '${recipeId}'
+    LIMIT 10;
     `;
 
   connection.query(query, function (err, rows, fields) {
@@ -401,7 +403,39 @@ function getRestaurantDetails(req, res) {
   connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
     else {
-      res.json(rows);
+      var restaurants = [];
+      for (var idx = 0; idx < rows.length; idx++) {
+        row = rows[idx];
+        restaurants.push({
+          id: row['id'], name: row['name'], address: row['address'], city: row['city'],
+          state: row['state'], postal_coe: row['postal_code'], latitude: row['latitude'],
+          longitude: row['longitude'], stars: row['stars']
+        });
+      }
+      var categoriesQuery = `SELECT categories FROM RestaurantCategories rc
+        WHERE id = '${restId}'`;
+
+
+      connection.query(categoriesQuery, function (err, rows, fields) {
+        if (err) { console.log(err); }
+        else {
+
+          for (var idx = 0; idx < restaurants.length; idx++) {
+
+            console.log(">>>> " + rows.length);
+            var categories = [];
+            for (var j = 0; j < rows.length; j++) {
+              categories.push(rows[j].categories);
+            }
+            restaurants[idx].categories = categories;
+          }
+
+          res.json(restaurants);
+
+        }
+      });
+
+
     }
   });
 }
@@ -497,14 +531,32 @@ function filterRecipesIngredients(req, res) {
     LIMIT 20;
     `;
 
-  connection.query(query, function (err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      res.json(rows);
-    }
-  });
+    connection.query(query, function (err, rows, fields) {
+      if (err) console.log(err);
+      else {
+        res.json(rows);
+      }
+    });
+    
+  }
 
-}
+  function getReviewsOfRestaurant(req, res) {
+    let restId = req.params.restid;
+  
+    var query = `
+      SELECT rating, text FROM Reviews
+      WHERE RestaurantID = '${restId}'
+      `;
+  
+    connection.query(query, function (err, rows, fields) {
+      if (err) console.log(err);
+      else {
+        res.json(rows);
+      }
+    });
+  
+  }
+
 
 // The exported functions, which can be accessed in index.js.
 module.exports = {
@@ -527,5 +579,6 @@ module.exports = {
   getRestaurantDetails,
   getDishesWithRecipes,
   getIngredientOptions,
-  filterRecipesIngredients
+  filterRecipesIngredients,
+  getReviewsOfRestaurant
 }

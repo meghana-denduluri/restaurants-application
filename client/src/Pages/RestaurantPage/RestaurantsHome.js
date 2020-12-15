@@ -184,109 +184,77 @@ export default class Restaurants extends React.Component {
     render() {
         return (
 
-            <div className="Dashboard">
-                <       PageNavbar active="restaurants" />
+<div className="Dashboard">
+<       PageNavbar active="restaurants" />
 
-                <br></br>
-                <div className="h1" style={{ color: 'white' }}> Restaurants </div>
-                <br></br>
+        <br></br>
+        <div className="flex-container h1 text-white"> Restaurants </div>
+        <br></br>
 
-                <div className="container movies-container">
-                    <div className="columns">
-                        <div className="jumbotron">
-                            <div className="h3">Explore</div>
-                            <div className="search-container">
-
-                                <br></br>
-                                <div className="search_bar">
-                                    <div className="h5"> City </div>
-                                    <Select
-                                        options={this.state.cityOptions}
-                                        onChange={this.selectCity}
-                                        placeholder="Search cities..."
-                                        openMenuOnClick={true}
-                                    />        </div>
-                                <br></br>
-
-                                <div className="search_bar">
-                                    <div className="h5"> Tag </div>
-                                    <Select
-                                        options={this.state.tagOptions}
-                                        onChange={this.selectTag}
-                                        placeholder="Search tags..."
-                                        openMenuOnClick={true}
-                                    />        </div>
-                                <br></br>
-
-                            </div>
+        <div className="flex-container">
+            <div className="flex-container row restaurant-container">
+                <div className="col-6 border-right">
+                <div className="h4">Explore</div>
+                    <div className="explore-section">
+                        <div className="search_bar col-6">
+                            <div className=""> City </div>
+                            <Select
+                                options={this.state.cityOptions}
+                                onChange={this.selectCity}
+                                placeholder= "Search cities..."
+                                openMenuOnClick={true}
+                            />        
                         </div>
-
-
-
-
-
-
-
-
-
-                        <div className="jumbotron">
-                            <div className="h3">Search</div>
-                            <div className="search-container">
-
-                                <br></br>
-
-
-                                <input
-                                    type="text"
-                                    placeholder="Enter Restaurant Name"
-                                    value={this.state.restSearch}
-                                    onChange={this.searchRestaurants}
-                                    id="movieName"
-                                    className="movie-input"
-                                />
-
-
-                            </div>
-                        </div>
+                        <div className="search_bar col-6 mt-4">
+                            <div className=""> Tags </div>
+                            <Select
+                                options={this.state.tagOptions}
+                                onChange={this.selectTag}
+                                placeholder= "Search tags..."
+                                openMenuOnClick={true}
+                            />        
+                        </div>  
                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <br></br>
-                    <div className="jumbotron">
-                        <div className="h3">Results</div>
-                        <div className="movies-container">
-                            <div className="movies-header">
-                                <div className="header-lg">
-                                    <strong>Name</strong>
-                                </div>
-                                <div className="header">
-                                    <strong>City</strong>
-                                </div>
-                                <div className="header">
-                                    <strong>Stars</strong>
-                                </div>
-                            </div>
-                            <div className="results-container" id="results">
-                                {this.state.restaurants}
-                            </div>
+                </div>
+                <div className="col-6 m-auto">
+                    <div className="search-section align-middle">
+                        <div className="d-flex p-4">
+                        <span className="h5 mr-3 mt-1">Search :</span>
+                            <input
+                            type="text"
+                            placeholder="Enter Restaurant Name"
+                            value={this.state.restSearch}
+                            onChange={this.searchRestaurants}
+                            id="movieName"
+                            className="form-control w-50"
+                        />
                         </div>
                     </div>
                 </div>
             </div>
+            <div className="restaurant-container mt-4">
+                <div className="flex-container">
+                    <div className="h4 row">Results</div>
+                    <div className="movies-container">
+                        <div className="movies-header">
+                            <div className="header-lg">
+                                <strong>Name</strong>
+                            </div>
+                            <div className="header">
+                                <strong>City</strong>
+                            </div>
+                            <div className="header">
+                                <strong>Stars</strong>
+                            </div>
+                        </div>
+                        <div className="results-container" id="results">
+                            {this.state.restaurants}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
         );
     }
 }

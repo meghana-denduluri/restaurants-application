@@ -1,0 +1,7 @@
+.recipe-name {
+    font-size: 20px;
+}
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+}
