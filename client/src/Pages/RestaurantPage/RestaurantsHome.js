@@ -232,7 +232,7 @@ export default class Restaurants extends React.Component {
                                 openMenuOnClick={true}
                             />        
                         </div>
-                        <div className="col-6 mt-2">
+                        <div className="col-12 mt-2">
                             <button className="Toggle tog-btn btn btn-dark mt-3"  onClick={this.updateDishToggle}>{this.state.dishToggle}</button>
                             <span className="ml-2">Restaurants with dish recipes</span>
                         </div>  
