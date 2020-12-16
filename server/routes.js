@@ -485,11 +485,16 @@ function getDishesWithRecipes(req, res) {
 
 
 function getIngredientOptions(req, res) {
-  var query = `select i.name from 
-  Ingredients i join InRecipe r on r.ingredientsID=i.id
-  group by i.name
-  order by count(recipeID) desc
-  limit 1000`;
+  //This was the query before making the materialized view
+  
+  // var query = `select i.name from 
+  // Ingredients i join InRecipe r on r.ingredientsID=i.id
+  // group by i.name
+  // order by count(recipeID) desc
+  // limit 1000`;
+
+  //This was the query after making the materialized view 
+  var query = `select name from MaterializedViewIngredientsDropdown;`
 
   connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
