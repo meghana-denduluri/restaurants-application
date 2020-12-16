@@ -85,3 +85,33 @@
 .jumbotron {
   padding-right: 40px;
 }
+
+.categories {
+  background-color: #d63900;
+  color: white;
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-size: 14px;
+  margin: 5px 10px 0 0;
+}
+.cat-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.selected-ingreds {
+  vertical-align: text-bottom;
+  margin-left: 15px;
+}
+
+.clear-icon {
+  height: 12px;
+  margin-top: 8px;
+  margin-left: 10px;
+}
+
+.tog-btn {
+  padding: 0px 15px;
+  display: inline-block;
+  vertical-align: bottom;
+}

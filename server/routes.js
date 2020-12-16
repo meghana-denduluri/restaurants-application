@@ -23,6 +23,7 @@ connection.connect(function (err) {
 function filterRestaurants(req, res) {
   let city = req.params.city;
   let tag = req.params.tag;
+  let toggle = req.params.toggle;
   if (city != 'All' && tag != 'All') {
 
     var query = `
@@ -31,16 +32,12 @@ function filterRestaurants(req, res) {
   JOIN RestaurantCategories ON Restaurants.id=RestaurantCategories.id
   WHERE Restaurants.city = '${city}'
   and RestaurantCategories.categories= '${tag}' 
-  order by stars desc, RAND ()
-  limit 20;
   `;
   } else if (city != 'All' && tag == 'All') {
     var query = `
     SELECT Restaurants.id, name, city, stars
     FROM Restaurants
     WHERE Restaurants.city = '${city}'
-    order by stars desc, RAND ()
-    limit 20;
     `;
   } else if (tag != 'All' && city == 'All') {
     var query = `
@@ -48,19 +45,19 @@ function filterRestaurants(req, res) {
   FROM Restaurants
   JOIN RestaurantCategories ON Restaurants.id=RestaurantCategories.id
   WHERE RestaurantCategories.categories= '${tag}' 
-  order by stars desc, RAND ()
-  limit 20;
   `;
   }
   else {
     var query = `
     SELECT Restaurants.id, name, city, stars
     FROM Restaurants
-    order by stars desc, RAND ()
-    limit 20;
+    WHERE True
     `;
   }
-
+  if (toggle == 'On'){
+    query += ' and Restaurants.id in (select restaurantID from ServedAt)'
+  }
+  query += ' order by stars desc, RAND () limit 20;'
   connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
     else {
@@ -165,13 +162,13 @@ function searchRecipes(req, res) {
 
 function filterRecipes(req, res) {
   let tag = req.params.tag;
+  let toggle = req.params.toggle;
   if (tag == 'All') {
 
     var query = `
     SELECT id, name, description
     FROM Recipes
-    order by RAND ()
-    limit 20;
+    where true
   `;
   }
   else {
@@ -180,11 +177,14 @@ function filterRecipes(req, res) {
     FROM Recipes
     NATURAL JOIN RecipeTags
     where tag = '${tag}'
-    order by RAND ()
-    limit 20;
   `;
   }
 
+  if (toggle=='On'){
+    query += ' and id in (select recipeID from RecipeOf)' 
+  }
+
+  query += ' order by RAND () limit 20;' 
   connection.query(query, function (err, rows, fields) {
     if (err) console.log(err);
     else {
@@ -373,11 +373,11 @@ function getRestaurantLinks(req, res) {
   let recipeId = req.params.recipeId;
 
   var query = `
-    SELECT s.restaurantID, res.name
+    SELECT DISTINCT s.restaurantID, res.name
     FROM RecipeOf r JOIN ServedAt s ON r.dishID = s.dishID
     INNER JOIN Restaurants res on res.id = s.restaurantID
     WHERE r.recipeID = '${recipeId}'
-    ORDER BY res.stars DESC
+    ORDER BY res.stars DESC, RAND ()
     LIMIT 10;
     `;
 
@@ -528,9 +528,14 @@ function filterRecipesIngredients(req, res) {
     )
     SELECT *
     FROM Recipes NATURAL JOIN ids
-    ORDER BY RAND ()
-    LIMIT 20;
+    WHERE True
     `;
+    
+    if (toggle=='On'){
+      query += ' and id in (select recipeID from RecipeOf)' 
+    }
+
+    query += ' order by RAND () limit 20;' 
 
     connection.query(query, function (err, rows, fields) {
       if (err) console.log(err);

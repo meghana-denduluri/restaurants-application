@@ -6,6 +6,7 @@ import PageNavbar from '../PageNavbar';
 import './restDash.css';
 import DishWithRecipesRow from './DishWithRecipesRow';
 import RestauratantReviewRow from './RestauratantReviewRow';
+import Stars from "../../Components/Stars/Stars"
 
 export default class RestaurantDetails extends React.Component {
 
@@ -107,38 +108,47 @@ export default class RestaurantDetails extends React.Component {
 
         for (const i in this.state.categories) {
             const cat = this.state.categories[i]
-            categoriesView.push(<li key={cat}>{cat}</li>)
+            categoriesView.push(<span className="categories">{cat}</span>)
         }
 
         return (
 
             <div className="restaurant">
                 <PageNavbar active="" />
-                <div className="name">{this.state.name}</div>
-                <div className="city">{this.state.city} ({this.state.state})</div>
-
-                <div className="address">{this.state.address} ({this.state.postalCode})</div>
-                <br />
-                <div className="stars">Rating: {this.state.stars} stars</div>
-                <br />
-                Categories
-                <div>{categoriesView}</div>
-                <br />
-                {this.state.dishes && this.state.dishes.length > 0 ?
-                    <div>
-                        <h2>Dishes:</h2>
-                        {this.state.dishes}
-                    </div> :
-                    <div>This restaurant has no dishes :(</div>
-                }
-                <br />
-                {this.state.reviews && this.state.reviews.length > 0 ?
-                    <div>
-                        <h2>Reviews:</h2>
-                        {this.state.reviews}
-                    </div> :
-                    <div>This restaurant has no reviews yet</div>
-                }
+                <div className="flex-container">
+                    <div className="h3 mt-3 d-flex">
+                        {this.state.name}
+                        <div className="ml-3">
+                            {this.state.stars !== undefined && <Stars stars={this.state.stars}/>}
+                        </div>
+                    </div>
+                    <div className="cat-container">{categoriesView}</div>
+                    <div className="address-container mt-2 font-italic">
+                        <div>
+                            {this.state.address} ({this.state.postalCode})
+                        </div>
+                        <div>
+                            {this.state.city} ({this.state.state})
+                        </div>
+                    </div>
+                    <div className="dishes-container">
+                        {this.state.dishes && this.state.dishes.length > 0 ?
+                            <div>
+                                <h4 className="mt-4">Dishes served here:</h4>
+                                {this.state.dishes}
+                            </div> :
+                            <div>This restaurant has no dishes :(</div>
+                        }
+                        <br />
+                        {this.state.reviews && this.state.reviews.length > 0 ?
+                            <div>
+                                <h2>Reviews:</h2>
+                                {this.state.reviews}
+                            </div> :
+                            <div>This restaurant has no reviews yet</div>
+                        }
+                    </div>
+                </div>
 
             </div>
 
