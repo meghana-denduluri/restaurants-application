@@ -21,7 +21,7 @@ To build our database, we mainly utilized two datasets, namely the Yelp Open Dat
 - React.js, Express.js and Node.js for web development
 - Amazon Web Services- RDS cloud database service
 
-## Build
+## BUILD
 
 You'll need:
 
