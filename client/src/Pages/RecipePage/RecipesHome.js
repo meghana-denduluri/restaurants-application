@@ -263,7 +263,7 @@ updateIngredientOptions(){
                   /> 
                 </div>
                 <div className="ingred-container mt-3">
-                  <div className="h5 d-flex">Ingredients List: (Select upto 3)
+                  <div className="h5 d-flex">Ingredients List: (Select up to 3)
                     <span className="selected-ingreds badge badge-info">
                       {ingredArray.toString()}
                     </span>
