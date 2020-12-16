@@ -503,6 +503,7 @@ function filterRecipesIngredients(req, res) {
   
   let ingredientsList = req.params.ingredients;
   let ingredientsArray = ingredientsList.split(',');
+  let toggle = req.params.toggle;
   console.log(ingredientsArray);
   let ingredients = '(';
   for (let i = 0; i < ingredientsArray.length; i++) {
