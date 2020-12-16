@@ -15,8 +15,8 @@ export default class RestaurantReviewRow extends React.Component {
     render() {
 
         return (
-            <div>
-                <div className="stars"><Stars stars={this.state.rating} /></div>
+            <div className="mb-4">
+                <div className="stars mb-2"><Stars stars={this.state.rating} /></div>
                 <div>{this.state.text}</div>
             </div>
         );

@@ -5,6 +5,7 @@ import PageNavbar from '../PageNavbar';
 // import GenreButton from './GenreButton';
 import DashboardRecipeRow from './DashboardRecipeRow';
 import '../RestaurantPage/restDash.css';
+import clear from '../../assets/clear.svg';
 
 export default class Recipes extends React.Component {
     constructor(props) {
@@ -18,7 +19,8 @@ export default class Recipes extends React.Component {
             searchTag: 'All',
             ingredientList: [],
             ingredientOptions: [],
-            restaurantToggle: 'On'
+            restaurantToggle: 'On',
+            restState: true
         }
 
     this.updateRestaurantToggle = this.updateRestaurantToggle.bind(this)
@@ -52,13 +54,15 @@ export default class Recipes extends React.Component {
     updateRestaurantToggle (){
       if (this.state.restaurantToggle=='On'){
           this.setState({
-              restaurantToggle: 'Off'
+              restaurantToggle: 'Off',
+              restState: false,
       })
       this.filterRecipesTags(this.state.searchTag, 'Off');
   }
       else {
           this.setState({
-            restaurantToggle: 'On'
+            restaurantToggle: 'On',
+            restState: true,
       })
       this.filterRecipesTags(this.state.searchTag, 'On');
       }
@@ -228,117 +232,89 @@ updateIngredientOptions(){
           this.setState({
             ingredientOptions
           })
+          
 
       })
 }
 
 
     render() {
+      var ingredArray = [];
+          this.state.ingredientList.map(x=> {
+            ingredArray.push(x)
+          })
         return (
 
 <div className="Dashboard">
-<       PageNavbar active="recipes" />
-
-        <br></br>
-        <div className="h1" style={{color: 'white'}}> Recipes </div>
-        <br></br>
-        
-        <div className="container movies-container">
-          
-        <div className="columns">
-          
-          <div className="jumbotron">
-            <div className="h3">Explore</div>
-            <div>Recipes with restaurant info</div> <button className='Toggle'  onClick={this.updateRestaurantToggle}>{this.state.restaurantToggle}</button>
-            <div className="search-container">
-            
-<br></br>
-
-                <div className="search_bar">
-                  
-                <div className="h5"> Tag </div>
-                <Select
-                    options={this.state.tagOptions}
-                    onChange={this.selectTag}
-                    placeholder= "Search tags..."
-                    openMenuOnClick={true}
-                />        </div>
-               <br></br> 
-               
-
-            </div>
-          </div>
-
-
-
-
-
-
-            
-
-
-            <div className="jumbotron">
-            <div className="h3">Search</div>
-            <div className="search-container">
-            
-<br></br>
-
-
-<input
-                type="text"
-                placeholder="Enter Recipe Name"
-                value={this.state.recSearch}
-                onChange={this.searchRecipes}
-                id="movieName"
-                className="movie-input"
-              />
-</div>
-<br></br> 
-<div className="search_bar">
-                <div className="h5"> Ingredients (select up to 3):</div>
-
-                  <span className="button-span">
-                  <button style={{'padding-right':'5em'}} onClick={()=>this.setState({
-                  ingredientList:[]
-          })}>Clear</button></span>
-                  <div >Ingredients List: {this.state.ingredientList.toString()}</div>
-                <Select
-                    options={this.state.ingredientOptions}
-                    onChange={this.selectIngredient}
-                    placeholder= "Search ingredients..."
-                    openMenuOnClick={true}
-                />        </div>
-               
-            
-          </div>
-          </div>
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-          <br></br>
-          <div className="jumbotron">
-          <div className="h3">Results</div>
-            <div className="movies-container">
-              <div className="movies-header">
+  <PageNavbar active="recipes"/>
+  <br></br>
+  <div className="flex-container h1 text-white"> Recipes </div>
+        <div className="flex-container pb-4"> 
+          <div className="flex-container row restaurant-container">
+              <div className="col-6 border-right">
+                <div className="h4">Explore</div>
+                <div className="tag-container">
+                  <div className="h5"> Tag </div>
+                  <Select
+                      options={this.state.tagOptions}
+                      onChange={this.selectTag}
+                      placeholder= "Search tags..."
+                      openMenuOnClick={true}
+                  /> 
+                </div>
+                <div className="ingred-container mt-3">
+                  <div className="h5 d-flex">Ingredients List: (Select upto 3)
+                    <span className="selected-ingreds badge badge-info">
+                      {ingredArray.toString()}
+                    </span>
+                    {ingredArray.length > 0 && <img onClick={()=>this.setState({
+                            ingredientList:[]
+                    })} className="clear-icon" src={clear}/>}
+                  </div>
+                  <Select
+                      options={this.state.ingredientOptions}
+                      onChange={this.selectIngredient}
+                      placeholder= "Search ingredients..."
+                      openMenuOnClick={true}
+                  />
+                </div>
+                <div>
+                  {/* <div class="custom-control custom-switch mt-2">
+                    <input onChange={this.updateRestaurantToggle} value={this.state.restState} type="checkbox" class="custom-control-input" id="customSwitch1" />
+                    <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
+                  </div> */}
+                  <button className='Toggle tog-btn btn btn-dark mt-3'  onClick={this.updateRestaurantToggle}>{this.state.restaurantToggle}</button>
+                  <span className="ml-2">Recipes with restaurant info</span>
+                </div>
               </div>
-              <div className="results-container" id="results">
-                {this.state.recipes}
+              <div className="col-6 m-auto">
+                  <div className="search-section align-middle">
+                      <div className="d-flex p-4">
+                      <span className="h5 mr-3 mt-1">Search :</span>
+                        <input
+                          type="text"
+                          placeholder="Enter Recipe Name"
+                          value={this.state.recSearch}
+                          onChange={this.searchRecipes}
+                          id="movieName"
+                          className="form-control w-50"
+                        />
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div className="restaurant-container mt-4">
+            <div className="flex-container">
+                <div className="h4 row">Results</div>
+                <div className="movies-container">
+                  <div className="movies-header">
+                  </div>
+                  <div className="results-container" id="results">
+                    {this.state.recipes}
+                  </div>
               </div>
             </div>
-          </div>
+        </div>
         </div>
       </div>
         );

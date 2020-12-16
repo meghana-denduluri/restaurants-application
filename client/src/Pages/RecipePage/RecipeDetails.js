@@ -124,7 +124,6 @@ export default class RecipeDetails extends React.Component {
                             </div>
                             <div className="tags-container">
                                 {this.state.tags !== undefined && <Tags tags={this.state.tags}/>}
-                                
                             </div>
                             <div className="description-container mt-4">
                                 <div className="h4">Description</div>

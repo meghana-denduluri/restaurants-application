@@ -209,13 +209,12 @@ export default class Restaurants extends React.Component {
         <div className="flex-container h1 text-white"> Restaurants </div>
         <br></br>
 
-        <div className="flex-container">
+        <div className="flex-container pb-4">
             <div className="flex-container row restaurant-container">
                 <div className="col-6 border-right">
                 <div className="h4">Explore</div>
                     <div className="explore-section">
                         <div className="search_bar col-6">
-                        <span><div>Restaurants with dish info</div> <button  onClick={this.updateDishToggle}>{this.state.dishToggle}</button></span> 
                             <div className=""> City </div>
                             <Select
                                 options={this.state.cityOptions}
@@ -232,8 +231,14 @@ export default class Restaurants extends React.Component {
                                 placeholder= "Search tags..."
                                 openMenuOnClick={true}
                             />        
+                        </div>
+                        <div className="col-6 mt-2">
+                            <button className="Toggle tog-btn btn btn-dark mt-3"  onClick={this.updateDishToggle}>{this.state.dishToggle}</button>
+                            <span className="ml-2">Restaurants with dish recipes</span>
                         </div>  
+                         
                     </div>
+                    
                 </div>
                 <div className="col-6 m-auto">
                     <div className="search-section align-middle">
