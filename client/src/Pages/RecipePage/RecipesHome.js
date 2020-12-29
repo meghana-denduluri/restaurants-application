@@ -52,7 +52,7 @@ export default class Recipes extends React.Component {
     }
     
     updateRestaurantToggle (){
-      if (this.state.restaurantToggle=='On'){
+      if (this.state.restaurantToggle==='On'){
           this.setState({
               restaurantToggle: 'Off',
               restState: false,

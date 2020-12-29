@@ -184,7 +184,7 @@ export default class Restaurants extends React.Component {
     }
 
     updateDishToggle (){
-        if (this.state.dishToggle=='On'){
+        if (this.state.dishToggle==='On'){
             this.setState({
                 dishToggle: 'Off'
         })
