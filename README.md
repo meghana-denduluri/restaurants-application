@@ -50,3 +50,9 @@ $ cd client
 $ npm install
 $ npm start
 ```
+
+## Supplementary Materials
+- Data Wrangling Notebooks: Jupyter Notebooks for data wrangling and entity resolution in Python (Pandas, Pyspark)
+- Web Scraper: Jupyter Notebook for scraping Yelp for menu information
+- Report: PDF describing the project
+- Website_Description: 4 minute video describing the website features
